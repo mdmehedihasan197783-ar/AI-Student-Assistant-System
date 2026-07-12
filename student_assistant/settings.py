@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,6 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "core",
 ]
 
@@ -47,10 +49,21 @@ WSGI_APPLICATION = "student_assistant.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB", "ai_student_assistant"),
+        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", ""),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        "OPTIONS": {
+            "connect_timeout": int(os.environ.get("POSTGRES_CONNECT_TIMEOUT", "5")),
+        },
     }
 }
+
+LOGIN_URL = "core:login"
+LOGIN_REDIRECT_URL = "core:dashboard"
+LOGOUT_REDIRECT_URL = "core:landing"
 
 AUTH_PASSWORD_VALIDATORS = []
 LANGUAGE_CODE = "en-us"

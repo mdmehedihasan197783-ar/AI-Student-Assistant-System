@@ -1,0 +1,95 @@
+{% extends "core/base.html" %}
+
+{% block title %}Student Dashboard | AI Student Assistant System{% endblock %}
+
+{% block content %}
+<main class="dashboard-page">
+    <section class="dashboard-hero">
+        <div>
+            <span class="section-label">Dashboard</span>
+            <h1>Welcome, {{ profile.full_name|default:user.email }}</h1>
+            <p>{{ profile.department|default:"Student" }}{% if profile.semester %} | {{ profile.semester }}{% endif %}{% if profile.university %} | {{ profile.university }}{% endif %}</p>
+        </div>
+        <div class="dashboard-actions">
+            <a class="outline-btn" href="{% url 'core:profile' %}">Edit Profile</a>
+            <a class="outline-btn" href="{% url 'core:logout' %}">Logout</a>
+        </div>
+    </section>
+
+    <section class="stats-grid" aria-label="Academic activity summary">
+        <article class="stat-card"><span>Notes</span><strong>{{ stats.notes }}</strong></article>
+        <article class="stat-card"><span>Quizzes</span><strong>{{ stats.quizzes }}</strong></article>
+        <article class="stat-card"><span>Resume</span><strong>{{ stats.resume_progress }}%</strong></article>
+        <article class="stat-card"><span>Interview</span><strong>{{ stats.interview_score }}</strong></article>
+    </section>
+
+    <section class="dashboard-grid">
+        <article class="dashboard-panel profile-panel">
+            <h2>Student Information</h2>
+            {% if profile %}
+                <dl class="profile-list">
+                    <div><dt>Name</dt><dd>{{ profile.full_name }}</dd></div>
+                    <div><dt>Email</dt><dd>{{ user.email }}</dd></div>
+                    <div><dt>University</dt><dd>{{ profile.university }}</dd></div>
+                    <div><dt>Department</dt><dd>{{ profile.department }}</dd></div>
+                    <div><dt>Semester</dt><dd>{{ profile.semester }}</dd></div>
+                    <div><dt>Career goal</dt><dd>{{ profile.career_goal|default:"Not added yet" }}</dd></div>
+                    <div><dt>Skills</dt><dd>{{ profile.skills|default:"Not added yet" }}</dd></div>
+                    <div><dt>Learning goals</dt><dd>{{ profile.learning_goals|default:"Not added yet" }}</dd></div>
+                </dl>
+            {% else %}
+                <p class="empty-state">No student profile found for this account.</p>
+            {% endif %}
+        </article>
+
+        <article class="dashboard-panel">
+            <h2>Recent Notes</h2>
+            {% for note in recent_notes %}
+                <div class="activity-row"><strong>{{ note.title }}</strong><span>{{ note.updated_at|date:"M d, Y" }}</span></div>
+            {% empty %}
+                <p class="empty-state">No notes saved yet.</p>
+            {% endfor %}
+        </article>
+
+        <article class="dashboard-panel">
+            <h2>Quiz Activity</h2>
+            {% for quiz in recent_quizzes %}
+                <div class="activity-row"><strong>{{ quiz.topic }}</strong><span>{{ quiz.score }}/{{ quiz.total_questions }}</span></div>
+            {% empty %}
+                <p class="empty-state">No quiz results yet.</p>
+            {% endfor %}
+        </article>
+
+        <article class="dashboard-panel">
+            <h2>Resume Progress</h2>
+            {% if latest_resume %}
+                <div class="progress mb-3" role="progressbar" aria-label="Resume progress" aria-valuenow="{{ latest_resume.progress }}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: {{ latest_resume.progress }}%">{{ latest_resume.progress }}%</div>
+                </div>
+                <p>{{ latest_resume.title }}</p>
+            {% else %}
+                <p class="empty-state">Resume information has not been added yet.</p>
+            {% endif %}
+        </article>
+
+        <article class="dashboard-panel">
+            <h2>Mock Interview</h2>
+            {% if latest_interview %}
+                <div class="activity-row"><strong>{{ latest_interview.role }}</strong><span>Score {{ latest_interview.score }}</span></div>
+                <p>{{ latest_interview.feedback|default:"Feedback not added yet." }}</p>
+            {% else %}
+                <p class="empty-state">No mock interview results yet.</p>
+            {% endif %}
+        </article>
+
+        <article class="dashboard-panel">
+            <h2>User Activity</h2>
+            {% for activity in recent_activities %}
+                <div class="activity-row"><strong>{{ activity.get_action_display }}</strong><span>{{ activity.created_at|date:"M d, H:i" }}</span></div>
+            {% empty %}
+                <p class="empty-state">No user activity recorded yet.</p>
+            {% endfor %}
+        </article>
+    </section>
+</main>
+{% endblock %}

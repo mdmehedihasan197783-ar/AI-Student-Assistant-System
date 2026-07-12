@@ -1,0 +1,85 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Login | AI Student Assistant System{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<main class="split-auth-page">
+    <section class="split-auth-visual">
+        <a class="split-logo" href="{% url 'core:landing' %}" aria-label="AI Student Assistant System home">
+            <svg viewBox="0 0 64 52" aria-hidden="true"><path fill="#0865e8" d="M2 17 31 3l31 14-31 14L2 17Z"/><path fill="#0b4ea9" d="M13 23v15c12 9 26 9 37 0V23L31 33 13 23Z"/><path stroke="#0865e8" stroke-width="3" d="M57 20v18"/><circle cx="57" cy="41" r="3" fill="#0865e8"/></svg>
+            <span><strong><b>AI</b> Student</strong><small>Assistant System</small></span>
+        </a>
+
+        <div class="split-copy">
+            <h1>Your <span>Smart Academic</span><br>Companion</h1>
+            <p>Learn smarter, manage your notes, practice quizzes, build your resume and prepare for interviews with the power of AI.</p>
+        </div>
+
+        <div class="student-illustration" aria-hidden="true">
+            <div class="illustration-orbit"></div>
+            <img src="{% static 'core/img/hero-student.png' %}" alt="">
+            <div class="floating-card bot-card"><span></span></div>
+            <div class="floating-card report-card"><span></span><i></i><i></i><i></i></div>
+            <div class="floating-card idea-card"><span></span></div>
+            <div class="book-stack"><span>DATA STRUCTURES</span><span>ALGORITHMS</span><span>SOFTWARE ENGINEERING</span></div>
+        </div>
+
+        <div class="split-feature-row">
+            <article><span class="feature-mini bot-mini"></span><strong>AI Tutor</strong><small>Get instant help and explanations</small></article>
+            <article><span class="feature-mini note-mini"></span><strong>Smart Tools</strong><small>Notes, Quizzes, Resume & more</small></article>
+            <article><span class="feature-mini chart-mini"></span><strong>Interview Prep</strong><small>Practice with AI and improve</small></article>
+        </div>
+    </section>
+
+    <section class="split-auth-form-panel">
+        <div class="auth-tabs" aria-label="Authentication tabs">
+            <a class="active" href="{% url 'core:login' %}">Login</a>
+            <a href="{% url 'core:register' %}">Sign Up</a>
+        </div>
+
+        <form class="split-auth-form" method="post" novalidate>
+            {% csrf_token %}
+            <h2>Welcome Back!</h2>
+            <p>Login to continue to your account</p>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="field-group full-field">
+                <label for="{{ form.email.id_for_label }}">Email Address</label>
+                <div class="icon-field">
+                    <span class="field-icon mail-icon"></span>
+                    <input id="{{ form.email.id_for_label }}" name="{{ form.email.name }}" type="email" value="{{ form.email.value|default:'' }}" placeholder="Enter your email" required>
+                </div>
+                {% if form.email.errors %}<div class="form-error">{{ form.email.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <div class="field-group full-field">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+                <div class="icon-field password-field">
+                    <span class="field-icon lock-icon"></span>
+                    <input id="{{ form.password.id_for_label }}" name="{{ form.password.name }}" type="password" placeholder="Enter your password" required>
+                    <span class="eye-icon" aria-hidden="true"></span>
+                </div>
+                {% if form.password.errors %}<div class="form-error">{{ form.password.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <div class="login-options">
+                <label><input type="checkbox" name="remember"> Remember me</label>
+                <a href="#">Forgot Password?</a>
+            </div>
+
+            <button class="create-account-btn login-btn" type="submit">Login</button>
+
+            <div class="register-divider split-divider"><span>or continue with</span></div>
+
+            <button class="google-btn" type="button"><span>G</span>Continue with Google</button>
+            <p class="register-login-link split-switch">Don't have an account? <a href="{% url 'core:register' %}">Sign Up</a></p>
+        </form>
+    </section>
+</main>
+{% endblock %}

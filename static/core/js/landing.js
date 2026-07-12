@@ -12,7 +12,3 @@ navigation?.querySelectorAll("a").forEach((link) => {
         menuButton?.setAttribute("aria-expanded", "false");
     });
 });
-
-document.querySelectorAll(".design-only-form").forEach((form) => {
-    form.addEventListener("submit", (event) => event.preventDefault());
-});
