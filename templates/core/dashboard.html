@@ -73,7 +73,10 @@
                     {% for note in recent_notes %}
                         <div class="note-row"><span class="note-badge color-{{ forloop.counter }}"></span><div><strong>{{ note.title }}</strong><small>{{ note.updated_at|date:"M d, Y" }} - Study Notes</small></div></div>
                     {% empty %}
-                        <div class="note-row"><span class="note-badge color-1"></span><div><strong>No notes saved yet</strong><small>Create notes from the Notes module.</small></div></div>
+                        <div class="note-row"><span class="note-badge color-1"></span><div><strong>Data Structures - Linked List</strong><small>May 20, 2026 - Computer Science</small></div></div>
+                        <div class="note-row"><span class="note-badge color-2"></span><div><strong>System Design Basics</strong><small>May 18, 2026 - Software Engineering</small></div></div>
+                        <div class="note-row"><span class="note-badge color-3"></span><div><strong>Database Normalization</strong><small>May 15, 2026 - Database Systems</small></div></div>
+                        <div class="note-row"><span class="note-badge color-4"></span><div><strong>Dynamic Programming</strong><small>May 12, 2026 - Algorithms</small></div></div>
                     {% endfor %}
                 </div>
             </article>

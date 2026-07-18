@@ -158,8 +158,8 @@
 .signup-form .field-group { margin-bottom:12px; }
 .compact-row { gap:12px; }
 
-.student-dashboard-shell { min-height:100vh; display:grid; grid-template-columns:214px 1fr; color:#14213d; background:#f4f8ff; font-size:13px; }
-.student-sidebar { display:flex; flex-direction:column; gap:24px; padding:25px 14px 20px; background:#fff; border-right:1px solid #e6edf7; }
+.student-dashboard-shell { min-height:100vh; display:grid; grid-template-columns:214px minmax(0,1fr); color:#14213d; background:#f4f8ff; font-size:13px; }
+.student-sidebar { position:sticky; top:0; height:100vh; display:flex; flex-direction:column; gap:24px; padding:25px 14px 20px; background:#fff; border-right:1px solid #e6edf7; }
 .dashboard-logo { display:flex; align-items:center; gap:8px; padding:0 8px 10px; }
 .dashboard-logo svg { width:32px; height:26px; flex:0 0 auto; }
 .dashboard-logo span { display:flex; flex-direction:column; line-height:1.04; }
@@ -185,8 +185,8 @@
 .dashboard-quote span { color:#5d9bff; font-size:23px; font-weight:800; }
 .dashboard-quote p { margin:3px 0 10px; font-size:11px; line-height:1.55; }
 .dashboard-quote cite { font-style:normal; font-size:11px; font-weight:800; }
-.student-dashboard-main { min-width:0; padding:20px 24px 28px; }
-.dashboard-topbar { height:48px; display:flex; align-items:center; gap:20px; margin-bottom:18px; }
+.student-dashboard-main { min-width:0; max-width:1280px; width:100%; padding:20px 24px 28px; }
+.dashboard-topbar { height:50px; display:flex; align-items:center; gap:20px; margin:-20px -24px 22px; padding:0 24px; background:#fff; border-bottom:1px solid #e7eef8; }
 .sidebar-toggle { width:32px; height:32px; display:grid; place-items:center; padding:8px; background:#fff; border:0; border-radius:6px; cursor:pointer; }
 .sidebar-toggle span { width:15px; height:2px; display:block; margin:2px 0; background:#7b8798; border-radius:4px; }
 .dashboard-search { width:min(360px,45vw); height:34px; display:grid; grid-template-columns:1fr 34px; align-items:center; background:#fff; border:1px solid #dce6f2; border-radius:18px; }
@@ -201,14 +201,15 @@
 .user-avatar { width:32px; height:32px; display:grid; place-items:center; color:#fff; background:linear-gradient(135deg,#ffb36b,#0865e8); border-radius:50%; font-weight:800; }
 .dashboard-user strong { display:block; font-size:12px; line-height:1.1; }
 .dashboard-user small { color:#6b7890; font-size:9px; }
+.dashboard-user div,.summary-card div,.note-row div,.task-row div,.learning-card { min-width:0; }
 .dashboard-welcome-row { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; margin-bottom:18px; }
 .dashboard-welcome-row h1 { margin:0 0 6px; font-size:22px; font-weight:800; }
 .dashboard-welcome-row p { margin:0; color:#64748b; font-size:12px; }
 .dashboard-date-card { min-width:142px; display:flex; align-items:center; gap:10px; padding:12px 14px; background:#fff; border:1px solid #e2eaf5; border-radius:7px; }
 .dashboard-date-card strong { display:block; font-size:12px; }
 .dashboard-date-card small { color:#6b7890; font-size:10px; }
-.dashboard-summary-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:18px; }
-.summary-card { min-height:112px; display:grid; grid-template-columns:45px 1fr; gap:11px; padding:17px 15px 12px; background:#fff; border:1px solid #e2eaf5; border-radius:8px; box-shadow:0 8px 22px rgba(23,43,77,.04); }
+.dashboard-summary-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; margin-bottom:18px; }
+.summary-card { min-height:112px; display:grid; grid-template-columns:45px minmax(0,1fr); gap:11px; padding:17px 15px 12px; background:#fff; border:1px solid #e2eaf5; border-radius:8px; box-shadow:0 8px 22px rgba(23,43,77,.04); }
 .summary-card .summary-icon { width:38px; height:38px; align-self:start; color:#fff; border-radius:50%; }
 .summary-card small,.summary-card em { display:block; color:#69778c; font-style:normal; font-size:10px; font-weight:700; }
 .summary-card strong { display:block; color:#13213a; font-size:27px; line-height:1.05; font-weight:800; }
@@ -223,7 +224,7 @@
 .summary-icon.tutor::before { width:18px; height:13px; border:2px solid #fff; border-radius:5px; }
 .summary-icon.resume::before { width:15px; height:18px; border:2px solid #fff; border-radius:2px; }
 .summary-icon.interview::before { width:19px; height:13px; border:2px solid #fff; border-radius:4px; }
-.dashboard-content-grid { display:grid; grid-template-columns:1fr 1.25fr 1.08fr; gap:14px; margin-bottom:18px; }
+.dashboard-content-grid { display:grid; grid-template-columns:minmax(210px,1fr) minmax(260px,1.25fr) minmax(220px,1.08fr); gap:14px; margin-bottom:18px; }
 .dashboard-widget,.continue-learning { background:#fff; border:1px solid #e2eaf5; border-radius:8px; box-shadow:0 8px 22px rgba(23,43,77,.04); }
 .dashboard-widget { min-height:230px; padding:16px; }
 .widget-title { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:13px; }
@@ -233,6 +234,7 @@
 .note-row,.task-row { display:flex; align-items:flex-start; gap:10px; }
 .note-row strong,.task-row strong { display:block; color:#18243b; font-size:11px; line-height:1.3; }
 .note-row small,.task-row small { color:#7a8798; font-size:9px; }
+.dashboard-user strong,.dashboard-user small,.summary-card small,.summary-card em,.note-row strong,.note-row small,.task-row strong,.task-row small,.learning-card strong,.learning-card small { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .note-badge { width:24px; height:24px; border-radius:5px; }
 .note-badge::before { width:11px; height:14px; border:2px solid currentColor; border-radius:2px; }
 .note-badge.color-1 { color:#3f82ff; background:#edf4ff; }
@@ -251,7 +253,7 @@
 .task-row.pink span { color:#ef5f8f; background:#fff0f5; }
 .task-row.blue span { color:#3f82ff; background:#edf4ff; }
 .continue-learning { padding:16px; }
-.learning-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+.learning-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; }
 .learning-card { min-height:98px; display:grid; grid-template-columns:36px 1fr; gap:4px 10px; align-items:start; padding:15px 12px; border-radius:7px; border:1px solid transparent; }
 .learning-card strong { color:#13213a; font-size:12px; font-weight:800; }
 .learning-card small { color:#5f6e83; font-size:9px; line-height:1.35; }
