@@ -1,95 +1,119 @@
 {% extends "core/base.html" %}
 
 {% block title %}Student Dashboard | AI Student Assistant System{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
 
 {% block content %}
-<main class="dashboard-page">
-    <section class="dashboard-hero">
-        <div>
-            <span class="section-label">Dashboard</span>
-            <h1>Welcome, {{ profile.full_name|default:user.email }}</h1>
-            <p>{{ profile.department|default:"Student" }}{% if profile.semester %} | {{ profile.semester }}{% endif %}{% if profile.university %} | {{ profile.university }}{% endif %}</p>
-        </div>
-        <div class="dashboard-actions">
-            <a class="outline-btn" href="{% url 'core:profile' %}">Edit Profile</a>
-            <a class="outline-btn" href="{% url 'core:logout' %}">Logout</a>
-        </div>
-    </section>
+<main class="student-dashboard-shell">
+    <aside class="student-sidebar">
+        <a class="dashboard-logo" href="{% url 'core:dashboard' %}" aria-label="AI Student dashboard">
+            <svg viewBox="0 0 64 52" aria-hidden="true"><path fill="#0865e8" d="M2 17 31 3l31 14-31 14L2 17Z"/><path fill="#0b4ea9" d="M13 23v15c12 9 26 9 37 0V23L31 33 13 23Z"/><path stroke="#0865e8" stroke-width="3" d="M57 20v18"/><circle cx="57" cy="41" r="3" fill="#0865e8"/></svg>
+            <span><strong><b>AI</b> Student</strong><small>Assistant System</small></span>
+        </a>
 
-    <section class="stats-grid" aria-label="Academic activity summary">
-        <article class="stat-card"><span>Notes</span><strong>{{ stats.notes }}</strong></article>
-        <article class="stat-card"><span>Quizzes</span><strong>{{ stats.quizzes }}</strong></article>
-        <article class="stat-card"><span>Resume</span><strong>{{ stats.resume_progress }}%</strong></article>
-        <article class="stat-card"><span>Interview</span><strong>{{ stats.interview_score }}</strong></article>
-    </section>
+        <nav class="dashboard-menu" aria-label="Student dashboard navigation">
+            <a class="active" href="{% url 'core:dashboard' %}"><span class="dash-icon home"></span>Dashboard</a>
+            <a href="#"><span class="dash-icon tutor"></span>AI Tutor</a>
+            <a href="#"><span class="dash-icon notes"></span>Notes</a>
+            <a href="#"><span class="dash-icon quizzes"></span>Quizzes</a>
+            <a href="#"><span class="dash-icon resume"></span>Resume Builder</a>
+            <a href="#"><span class="dash-icon interview"></span>AI Mock Interview</a>
+            <a href="{% url 'core:profile' %}"><span class="dash-icon profile"></span>Profile</a>
+            <a href="#"><span class="dash-icon settings"></span>Settings</a>
+            <a href="{% url 'core:logout' %}"><span class="dash-icon logout"></span>Logout</a>
+        </nav>
 
-    <section class="dashboard-grid">
-        <article class="dashboard-panel profile-panel">
-            <h2>Student Information</h2>
-            {% if profile %}
-                <dl class="profile-list">
-                    <div><dt>Name</dt><dd>{{ profile.full_name }}</dd></div>
-                    <div><dt>Email</dt><dd>{{ user.email }}</dd></div>
-                    <div><dt>University</dt><dd>{{ profile.university }}</dd></div>
-                    <div><dt>Department</dt><dd>{{ profile.department }}</dd></div>
-                    <div><dt>Semester</dt><dd>{{ profile.semester }}</dd></div>
-                    <div><dt>Career goal</dt><dd>{{ profile.career_goal|default:"Not added yet" }}</dd></div>
-                    <div><dt>Skills</dt><dd>{{ profile.skills|default:"Not added yet" }}</dd></div>
-                    <div><dt>Learning goals</dt><dd>{{ profile.learning_goals|default:"Not added yet" }}</dd></div>
-                </dl>
-            {% else %}
-                <p class="empty-state">No student profile found for this account.</p>
-            {% endif %}
-        </article>
+        <blockquote class="dashboard-quote">
+            <span>&ldquo;</span>
+            <p>The beautiful thing about learning is nobody can take it away from you.</p>
+            <cite>- B.B. King</cite>
+        </blockquote>
+    </aside>
 
-        <article class="dashboard-panel">
-            <h2>Recent Notes</h2>
-            {% for note in recent_notes %}
-                <div class="activity-row"><strong>{{ note.title }}</strong><span>{{ note.updated_at|date:"M d, Y" }}</span></div>
-            {% empty %}
-                <p class="empty-state">No notes saved yet.</p>
-            {% endfor %}
-        </article>
-
-        <article class="dashboard-panel">
-            <h2>Quiz Activity</h2>
-            {% for quiz in recent_quizzes %}
-                <div class="activity-row"><strong>{{ quiz.topic }}</strong><span>{{ quiz.score }}/{{ quiz.total_questions }}</span></div>
-            {% empty %}
-                <p class="empty-state">No quiz results yet.</p>
-            {% endfor %}
-        </article>
-
-        <article class="dashboard-panel">
-            <h2>Resume Progress</h2>
-            {% if latest_resume %}
-                <div class="progress mb-3" role="progressbar" aria-label="Resume progress" aria-valuenow="{{ latest_resume.progress }}" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar" style="width: {{ latest_resume.progress }}%">{{ latest_resume.progress }}%</div>
+    <section class="student-dashboard-main">
+        <header class="dashboard-topbar">
+            <button class="sidebar-toggle" type="button" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+            <label class="dashboard-search" aria-label="Search">
+                <input type="search" placeholder="Search anything...">
+                <span></span>
+            </label>
+            <div class="dashboard-user-tools">
+                <button class="notification-btn" type="button" aria-label="Notifications"><span></span></button>
+                <div class="dashboard-user">
+                    <span class="user-avatar">{{ profile.full_name|default:user.username|slice:":1"|upper }}</span>
+                    <div><strong>{{ profile.full_name|default:user.username }}</strong><small>{{ profile.department|default:"Student" }}</small></div>
                 </div>
-                <p>{{ latest_resume.title }}</p>
-            {% else %}
-                <p class="empty-state">Resume information has not been added yet.</p>
-            {% endif %}
-        </article>
+            </div>
+        </header>
 
-        <article class="dashboard-panel">
-            <h2>Mock Interview</h2>
-            {% if latest_interview %}
-                <div class="activity-row"><strong>{{ latest_interview.role }}</strong><span>Score {{ latest_interview.score }}</span></div>
-                <p>{{ latest_interview.feedback|default:"Feedback not added yet." }}</p>
-            {% else %}
-                <p class="empty-state">No mock interview results yet.</p>
-            {% endif %}
-        </article>
+        <section class="dashboard-welcome-row">
+            <div>
+                <h1>Welcome back, {{ profile.full_name|default:user.username }}!</h1>
+                <p>Here's what's happening with your learning today{% if profile %} - {{ profile.department }}{% if profile.semester %}, {{ profile.semester }}{% endif %}{% if profile.university %}, {{ profile.university }}{% endif %}{% endif %}.</p>
+            </div>
+            <div class="dashboard-date-card">
+                <span class="dash-icon calendar"></span>
+                <div><strong>{% now "M d, Y" %}</strong><small>{% now "l" %}</small></div>
+            </div>
+        </section>
 
-        <article class="dashboard-panel">
-            <h2>User Activity</h2>
-            {% for activity in recent_activities %}
-                <div class="activity-row"><strong>{{ activity.get_action_display }}</strong><span>{{ activity.created_at|date:"M d, H:i" }}</span></div>
-            {% empty %}
-                <p class="empty-state">No user activity recorded yet.</p>
-            {% endfor %}
-        </article>
+        <section class="dashboard-summary-grid" aria-label="Academic overview">
+            <article class="summary-card blue"><span class="summary-icon notes"></span><div><small>Notes</small><strong>{{ stats.notes }}</strong><em>Total Notes</em></div><a href="#">View all</a></article>
+            <article class="summary-card green"><span class="summary-icon quizzes"></span><div><small>Quizzes</small><strong>{{ stats.quizzes }}</strong><em>Completed</em></div><a href="#">View all</a></article>
+            <article class="summary-card purple"><span class="summary-icon tutor"></span><div><small>AI Tutor Chats</small><strong>{{ stats.activities }}</strong><em>This Month</em></div><a href="#">View all</a></article>
+            <article class="summary-card orange"><span class="summary-icon resume"></span><div><small>Resume</small><strong>{{ stats.resume_progress }}%</strong><em>Profile Strength</em></div><a href="#">Continue</a></article>
+            <article class="summary-card cyan"><span class="summary-icon interview"></span><div><small>Interviews</small><strong>{{ stats.interviews }}</strong><em>Mock Completed</em></div><a href="#">View all</a></article>
+        </section>
+
+        <section class="dashboard-content-grid">
+            <article class="dashboard-widget recent-notes-widget">
+                <div class="widget-title"><h2>Recent Notes</h2><a href="#">View all</a></div>
+                <div class="note-list">
+                    {% for note in recent_notes %}
+                        <div class="note-row"><span class="note-badge color-{{ forloop.counter }}"></span><div><strong>{{ note.title }}</strong><small>{{ note.updated_at|date:"M d, Y" }} - Study Notes</small></div></div>
+                    {% empty %}
+                        <div class="note-row"><span class="note-badge color-1"></span><div><strong>No notes saved yet</strong><small>Create notes from the Notes module.</small></div></div>
+                    {% endfor %}
+                </div>
+            </article>
+
+            <article class="dashboard-widget quiz-widget">
+                <div class="widget-title"><h2>Quiz Performance</h2><span>This Month</span></div>
+                <div class="quiz-chart" aria-label="Quiz performance line chart">
+                    <svg viewBox="0 0 320 150" role="img">
+                        <polyline points="8,103 47,91 84,111 121,72 160,44 201,75 241,53 282,27 312,42" fill="none" stroke="#2f72ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <g fill="#fff" stroke="#2f72ff" stroke-width="3"><circle cx="8" cy="103" r="5"/><circle cx="47" cy="91" r="5"/><circle cx="84" cy="111" r="5"/><circle cx="121" cy="72" r="5"/><circle cx="160" cy="44" r="5"/><circle cx="201" cy="75" r="5"/><circle cx="241" cy="53" r="5"/><circle cx="282" cy="27" r="5"/><circle cx="312" cy="42" r="5"/></g>
+                    </svg>
+                </div>
+                <div class="quiz-metrics">
+                    <div><small>Average Score</small><strong>{{ stats.average_quiz_score }}%</strong></div>
+                    <div><small>Highest Score</small><strong>{{ stats.highest_quiz_score }}%</strong></div>
+                    <div><small>Quizzes Taken</small><strong>{{ stats.quizzes }}</strong></div>
+                </div>
+            </article>
+
+            <article class="dashboard-widget tasks-widget">
+                <div class="widget-title"><h2>Upcoming Tasks</h2><a href="#">View all</a></div>
+                <div class="task-list">
+                    <div class="task-row orange"><span></span><div><strong>Complete Python Quiz</strong><small>May 22, 2026 - Algorithms</small></div></div>
+                    <div class="task-row green"><span></span><div><strong>Review OS Notes</strong><small>May 24, 2026 - Operating Systems</small></div></div>
+                    <div class="task-row pink"><span></span><div><strong>Mock Interview Practice</strong><small>May 25, 2026 - Software Engineer</small></div></div>
+                    <div class="task-row blue"><span></span><div><strong>Update Resume</strong><small>May 28, 2026 - Career Prep</small></div></div>
+                </div>
+            </article>
+        </section>
+
+        <section class="continue-learning">
+            <div class="widget-title"><h2>Continue Learning</h2></div>
+            <div class="learning-grid">
+                <a class="learning-card blue" href="#"><span class="feature-mini bot-mini"></span><strong>AI Tutor</strong><small>Ask anything and get instant AI-powered answers.</small><em>Start Chat</em></a>
+                <a class="learning-card orange" href="#"><span class="feature-mini note-mini"></span><strong>Notes</strong><small>Create, organize and manage your study notes.</small><em>Go to Notes</em></a>
+                <a class="learning-card purple" href="#"><span class="feature-mini chart-mini"></span><strong>Quizzes</strong><small>Practice quizzes and test your knowledge.</small><em>Start Quiz</em></a>
+                <a class="learning-card cyan" href="#"><span class="feature-mini interview-mini"></span><strong>AI Mock Interview</strong><small>Practice interviews and get AI feedback.</small><em>Start Interview</em></a>
+                <a class="learning-card green" href="#"><span class="feature-mini resume-mini"></span><strong>Resume Builder</strong><small>Build a professional resume with AI assistance.</small><em>Edit Resume</em></a>
+            </div>
+        </section>
     </section>
 </main>
 {% endblock %}

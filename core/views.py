@@ -70,12 +70,22 @@ def dashboard(request):
     latest_resume = Resume.objects.filter(student=request.user).first()
     latest_interview = MockInterview.objects.filter(student=request.user).first()
     recent_activities = UserActivity.objects.filter(user=request.user)[:5]
+    all_quizzes = QuizResult.objects.filter(student=request.user)
+    quiz_percentages = [
+        round((quiz.score / quiz.total_questions) * 100)
+        for quiz in all_quizzes
+        if quiz.total_questions
+    ]
 
     stats = {
         "notes": Note.objects.filter(student=request.user).count(),
-        "quizzes": QuizResult.objects.filter(student=request.user).count(),
+        "quizzes": all_quizzes.count(),
         "resume_progress": latest_resume.progress if latest_resume else 0,
+        "interviews": MockInterview.objects.filter(student=request.user).count(),
         "interview_score": latest_interview.score if latest_interview else 0,
+        "activities": recent_activities.count(),
+        "average_quiz_score": round(sum(quiz_percentages) / len(quiz_percentages)) if quiz_percentages else 0,
+        "highest_quiz_score": max(quiz_percentages) if quiz_percentages else 0,
     }
     return render(
         request,
