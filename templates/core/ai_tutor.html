@@ -1,0 +1,31 @@
+{% extends "core/app_shell.html" %}
+
+{% block title %}AI Tutor | AI Student Assistant System{% endblock %}
+
+{% block app_content %}
+<section class="module-header">
+    <div><h1>AI Tutor</h1><p>Ask academic questions and keep your AI learning history in the database.</p></div>
+</section>
+
+<section class="module-grid two-col">
+    <form class="module-card" method="post">
+        {% csrf_token %}
+        <h2>Ask a Question</h2>
+        <label class="form-label" for="{{ form.question.id_for_label }}">Question</label>
+        {{ form.question }}
+        {% if form.question.errors %}<div class="form-error">{{ form.question.errors|striptags }}</div>{% endif %}
+        <button class="primary-btn module-submit" type="submit">Generate Answer</button>
+    </form>
+
+    <article class="module-card">
+        <h2>Recent AI Tutor Chats</h2>
+        <div class="record-list">
+            {% for chat in chats %}
+                <div class="record-item"><strong>{{ chat.question }}</strong><p>{{ chat.answer }}</p><small>{{ chat.created_at|date:"M d, Y H:i" }}</small></div>
+            {% empty %}
+                <div class="record-item"><strong>No AI tutor questions yet</strong><p>Your saved tutor answers will appear here.</p></div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "core/app_shell.html" %}
+
+{% block title %}Resume Builder | AI Student Assistant System{% endblock %}
+
+{% block app_content %}
+<section class="module-header">
+    <div><h1>Resume Builder</h1><p>Store education, skills, projects, and experience for your resume.</p></div>
+</section>
+
+<form class="module-card module-form-wide" method="post">
+    {% csrf_token %}
+    <div class="profile-form-grid">
+        <div><label class="form-label" for="{{ form.title.id_for_label }}">Resume Title</label>{{ form.title }}</div>
+        <div><label class="form-label" for="{{ form.progress.id_for_label }}">Progress (%)</label>{{ form.progress }}</div>
+        <div class="wide-field"><label class="form-label" for="{{ form.education.id_for_label }}">Education</label>{{ form.education }}</div>
+        <div class="wide-field"><label class="form-label" for="{{ form.skills.id_for_label }}">Skills</label>{{ form.skills }}</div>
+        <div class="wide-field"><label class="form-label" for="{{ form.projects.id_for_label }}">Projects</label>{{ form.projects }}</div>
+        <div class="wide-field"><label class="form-label" for="{{ form.experience.id_for_label }}">Experience</label>{{ form.experience }}</div>
+    </div>
+    <button class="primary-btn module-submit" type="submit">Save Resume</button>
+</form>
+{% endblock %}

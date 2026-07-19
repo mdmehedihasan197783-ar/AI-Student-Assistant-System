@@ -1,71 +1,26 @@
-{% extends "core/base.html" %}
+{% extends "core/app_shell.html" %}
 
-{% block title %}Edit Profile | AI Student Assistant System{% endblock %}
+{% block title %}Profile | AI Student Assistant System{% endblock %}
 
-{% block content %}
-<main class="dashboard-page">
-    <section class="dashboard-hero profile-hero">
-        <div>
-            <span class="section-label">User Management</span>
-            <h1>Edit Student Profile</h1>
-            <p>Update the information stored in the student profile database table.</p>
-        </div>
-        <a class="outline-btn" href="{% url 'core:dashboard' %}">Dashboard</a>
-    </section>
+{% block app_content %}
+<section class="module-header">
+    <div><h1>Profile</h1><p>Manage personal, academic, skills, and learning goal information.</p></div>
+    <a class="outline-btn" href="{% url 'core:dashboard' %}">Dashboard</a>
+</section>
 
-    <form class="dashboard-panel profile-edit-form" method="post" enctype="multipart/form-data" novalidate>
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
-        {% endif %}
-
-        <div class="profile-form-grid">
-            <div>
-                <label class="form-label" for="{{ form.full_name.id_for_label }}">Full name</label>
-                {{ form.full_name }}
-                {% if form.full_name.errors %}<div class="form-error">{{ form.full_name.errors|striptags }}</div>{% endif %}
-            </div>
-            <div>
-                <label class="form-label" for="{{ form.university.id_for_label }}">University</label>
-                {{ form.university }}
-                {% if form.university.errors %}<div class="form-error">{{ form.university.errors|striptags }}</div>{% endif %}
-            </div>
-            <div>
-                <label class="form-label" for="{{ form.department.id_for_label }}">Department</label>
-                {{ form.department }}
-                {% if form.department.errors %}<div class="form-error">{{ form.department.errors|striptags }}</div>{% endif %}
-            </div>
-            <div>
-                <label class="form-label" for="{{ form.semester.id_for_label }}">Semester</label>
-                {{ form.semester }}
-                {% if form.semester.errors %}<div class="form-error">{{ form.semester.errors|striptags }}</div>{% endif %}
-            </div>
-            <div>
-                <label class="form-label" for="{{ form.career_goal.id_for_label }}">Career goal</label>
-                {{ form.career_goal }}
-                {% if form.career_goal.errors %}<div class="form-error">{{ form.career_goal.errors|striptags }}</div>{% endif %}
-            </div>
-            <div>
-                <label class="form-label" for="{{ form.photo.id_for_label }}">Profile photo</label>
-                {{ form.photo }}
-                {% if form.photo.errors %}<div class="form-error">{{ form.photo.errors|striptags }}</div>{% endif %}
-            </div>
-            <div class="wide-field">
-                <label class="form-label" for="{{ form.skills.id_for_label }}">Skills</label>
-                {{ form.skills }}
-                {% if form.skills.errors %}<div class="form-error">{{ form.skills.errors|striptags }}</div>{% endif %}
-            </div>
-            <div class="wide-field">
-                <label class="form-label" for="{{ form.learning_goals.id_for_label }}">Learning goals</label>
-                {{ form.learning_goals }}
-                {% if form.learning_goals.errors %}<div class="form-error">{{ form.learning_goals.errors|striptags }}</div>{% endif %}
-            </div>
-        </div>
-
-        <div class="profile-form-actions">
-            <a class="outline-btn" href="{% url 'core:dashboard' %}">Cancel</a>
-            <button class="primary-btn" type="submit">Save Profile</button>
-        </div>
-    </form>
-</main>
+<form class="module-card module-form-wide" method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="profile-form-grid">
+        <div><label class="form-label" for="{{ form.full_name.id_for_label }}">Full name</label>{{ form.full_name }}</div>
+        <div><label class="form-label" for="{{ form.university.id_for_label }}">University</label>{{ form.university }}</div>
+        <div><label class="form-label" for="{{ form.department.id_for_label }}">Department</label>{{ form.department }}</div>
+        <div><label class="form-label" for="{{ form.semester.id_for_label }}">Semester</label>{{ form.semester }}</div>
+        <div><label class="form-label" for="{{ form.career_goal.id_for_label }}">Career goal</label>{{ form.career_goal }}</div>
+        <div><label class="form-label" for="{{ form.photo.id_for_label }}">Profile photo</label>{{ form.photo }}</div>
+        <div class="wide-field"><label class="form-label" for="{{ form.skills.id_for_label }}">Skills</label>{{ form.skills }}</div>
+        <div class="wide-field"><label class="form-label" for="{{ form.learning_goals.id_for_label }}">Learning goals</label>{{ form.learning_goals }}</div>
+    </div>
+    <button class="primary-btn module-submit" type="submit">Save Profile</button>
+</form>
 {% endblock %}

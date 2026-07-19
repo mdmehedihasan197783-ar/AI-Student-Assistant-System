@@ -1,0 +1,24 @@
+{% extends "core/app_shell.html" %}
+
+{% block title %}Settings | AI Student Assistant System{% endblock %}
+
+{% block app_content %}
+<section class="module-header">
+    <div><h1>Settings</h1><p>Update account and academic profile information stored in the database.</p></div>
+</section>
+
+<form class="module-card module-form-wide" method="post">
+    {% csrf_token %}
+    <div class="profile-form-grid">
+        <div><label class="form-label" for="{{ form.full_name.id_for_label }}">Full Name</label>{{ form.full_name }}</div>
+        <div><label class="form-label" for="{{ form.email.id_for_label }}">Email</label>{{ form.email }}</div>
+        <div><label class="form-label" for="{{ form.university.id_for_label }}">University</label>{{ form.university }}</div>
+        <div><label class="form-label" for="{{ form.department.id_for_label }}">Department</label>{{ form.department }}</div>
+        <div><label class="form-label" for="{{ form.semester.id_for_label }}">Semester</label>{{ form.semester }}</div>
+        <div><label class="form-label" for="{{ form.career_goal.id_for_label }}">Career Goal</label>{{ form.career_goal }}</div>
+        <div class="wide-field"><label class="form-label" for="{{ form.skills.id_for_label }}">Skills</label>{{ form.skills }}</div>
+        <div class="wide-field"><label class="form-label" for="{{ form.learning_goals.id_for_label }}">Learning Goals</label>{{ form.learning_goals }}</div>
+    </div>
+    <button class="primary-btn module-submit" type="submit">Save Settings</button>
+</form>
+{% endblock %}

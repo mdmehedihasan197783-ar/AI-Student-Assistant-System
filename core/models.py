@@ -25,6 +25,11 @@ class UserActivity(models.Model):
         LOGGED_IN = "logged_in", "Logged in"
         LOGGED_OUT = "logged_out", "Logged out"
         PROFILE_UPDATED = "profile_updated", "Profile updated"
+        AI_CHAT = "ai_chat", "AI tutor question"
+        NOTE_SAVED = "note_saved", "Note saved"
+        QUIZ_SAVED = "quiz_saved", "Quiz result saved"
+        RESUME_UPDATED = "resume_updated", "Resume updated"
+        INTERVIEW_COMPLETED = "interview_completed", "Interview completed"
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="activities")
     action = models.CharField(max_length=40, choices=Action.choices)
@@ -38,6 +43,19 @@ class UserActivity(models.Model):
 
     def __str__(self):
         return f"{self.user.email or self.user.username} - {self.get_action_display()}"
+
+
+class AIChat(models.Model):
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="ai_chats")
+    question = models.TextField()
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.question[:80]
 
 
 class Note(models.Model):

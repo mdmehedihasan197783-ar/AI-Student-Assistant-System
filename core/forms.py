@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
-from .models import StudentProfile
+from .models import AIChat, MockInterview, Note, QuizResult, Resume, StudentProfile
 
 
 class StudentRegistrationForm(forms.Form):
@@ -97,3 +97,125 @@ class StudentProfileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "form-control")
+
+
+class AIChatForm(forms.ModelForm):
+    class Meta:
+        model = AIChat
+        fields = ["question"]
+        widgets = {
+            "question": forms.Textarea(attrs={"rows": 4, "placeholder": "Ask your academic question..."}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")
+
+
+class NoteForm(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ["title", "content"]
+        widgets = {
+            "content": forms.Textarea(attrs={"rows": 8, "placeholder": "Write your study note..."}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")
+
+
+class QuizResultForm(forms.ModelForm):
+    class Meta:
+        model = QuizResult
+        fields = ["topic", "score", "total_questions"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        score = cleaned_data.get("score")
+        total_questions = cleaned_data.get("total_questions")
+        if score is not None and total_questions is not None and score > total_questions:
+            self.add_error("score", "Score cannot be greater than total questions.")
+        return cleaned_data
+
+
+class ResumeForm(forms.ModelForm):
+    class Meta:
+        model = Resume
+        fields = ["title", "education", "skills", "projects", "experience", "progress"]
+        widgets = {
+            "education": forms.Textarea(attrs={"rows": 4}),
+            "skills": forms.Textarea(attrs={"rows": 4}),
+            "projects": forms.Textarea(attrs={"rows": 4}),
+            "experience": forms.Textarea(attrs={"rows": 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")
+
+    def clean_progress(self):
+        progress = self.cleaned_data["progress"]
+        if progress > 100:
+            raise forms.ValidationError("Progress cannot be greater than 100.")
+        return progress
+
+
+class MockInterviewForm(forms.ModelForm):
+    answer = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "placeholder": "Write your practice answer..."}))
+
+    class Meta:
+        model = MockInterview
+        fields = ["role", "answer"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")
+
+
+class AccountSettingsForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = StudentProfile
+        fields = ["full_name", "university", "department", "semester", "career_goal", "skills", "learning_goals"]
+        widgets = {
+            "skills": forms.Textarea(attrs={"rows": 3}),
+            "learning_goals": forms.Textarea(attrs={"rows": 3}),
+        }
+
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields["email"].initial = user.email
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].lower()
+        existing = User.objects.filter(email=email).exclude(pk=self.user.pk if self.user else None)
+        if existing.exists():
+            raise forms.ValidationError("This email is already used by another account.")
+        return email
+
+    def save(self, commit=True):
+        profile = super().save(commit=commit)
+        if self.user:
+            self.user.email = self.cleaned_data["email"].lower()
+            self.user.username = self.user.email
+            names = profile.full_name.split(maxsplit=1)
+            self.user.first_name = names[0]
+            self.user.last_name = names[1] if len(names) > 1 else ""
+            if commit:
+                self.user.save(update_fields=["email", "username", "first_name", "last_name"])
+        return profile

@@ -5,3 +5,5 @@ db.sqlite3
 .env
 .proposal_render/
 staticfiles/
+media/
+profile_photos/

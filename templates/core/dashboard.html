@@ -13,15 +13,15 @@
         </a>
 
         <nav class="dashboard-menu" aria-label="Student dashboard navigation">
-            <a class="active" href="{% url 'core:dashboard' %}"><span class="dash-icon home"></span>Dashboard</a>
-            <a href="#"><span class="dash-icon tutor"></span>AI Tutor</a>
-            <a href="#"><span class="dash-icon notes"></span>Notes</a>
-            <a href="#"><span class="dash-icon quizzes"></span>Quizzes</a>
-            <a href="#"><span class="dash-icon resume"></span>Resume Builder</a>
-            <a href="#"><span class="dash-icon interview"></span>AI Mock Interview</a>
-            <a href="{% url 'core:profile' %}"><span class="dash-icon profile"></span>Profile</a>
-            <a href="#"><span class="dash-icon settings"></span>Settings</a>
-            <a href="{% url 'core:logout' %}"><span class="dash-icon logout"></span>Logout</a>
+            <a class="active" href="{% url 'core:dashboard' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h5v-6h4v6h5V9.5"/></svg>Dashboard</a>
+            <a href="{% url 'core:ai_tutor' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8V4"/><path d="M8 4h8"/><rect x="5" y="8" width="14" height="11" rx="4"/><path d="M9 13h.01"/><path d="M15 13h.01"/><path d="M10 17h4"/><path d="M3 13h2"/><path d="M19 13h2"/></svg>AI Tutor</a>
+            <a href="{% url 'core:notes' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4"/><path d="M9 11h6"/><path d="M9 15h6"/></svg>Notes</a>
+            <a href="{% url 'core:quizzes' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11 11 13l4-5"/><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M8 17h8"/></svg>Quizzes</a>
+            <a href="{% url 'core:resume_builder' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4"/><path d="M9 12h6"/><path d="M9 16h6"/><path d="M9 8h2"/></svg>Resume Builder</a>
+            <a href="{% url 'core:mock_interview' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v4a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4Z"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg>AI Mock Interview</a>
+            <a href="{% url 'core:profile' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profile</a>
+            <a href="{% url 'core:settings' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.12 2.12-.04-.04a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.66V21h-3v-.06a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-1.98.36l-.04.04-2.12-2.12.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.66-1.1H3v-3h.06A1.8 1.8 0 0 0 4.72 9.8a1.8 1.8 0 0 0-.36-1.98l-.04-.04 2.12-2.12.04.04a1.8 1.8 0 0 0 1.98.36 1.8 1.8 0 0 0 1.1-1.66V4h3v.06a1.8 1.8 0 0 0 1.1 1.66 1.8 1.8 0 0 0 1.98-.36l.04-.04 2.12 2.12-.04.04a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.66 1.1H21v3h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg>Settings</a>
+            <a href="{% url 'core:logout' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5v16h5"/><path d="M14 8l4 4-4 4"/><path d="M8 12h10"/></svg>Logout</a>
         </nav>
 
         <blockquote class="dashboard-quote">
@@ -36,12 +36,21 @@
             <button class="sidebar-toggle" type="button" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
             <label class="dashboard-search" aria-label="Search">
                 <input type="search" placeholder="Search anything...">
-                <span></span>
+                <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
             </label>
             <div class="dashboard-user-tools">
-                <button class="notification-btn" type="button" aria-label="Notifications"><span></span></button>
+                <button class="notification-btn" type="button" aria-label="Notifications">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg>
+                    <span></span>
+                </button>
                 <div class="dashboard-user">
-                    <span class="user-avatar">{{ profile.full_name|default:user.username|slice:":1"|upper }}</span>
+                    <span class="user-avatar">
+                        {% if profile.photo %}
+                            <img src="{{ profile.photo.url }}" alt="{{ profile.full_name|default:user.username }} profile photo">
+                        {% else %}
+                            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#eef5ff"/><circle cx="24" cy="18" r="8" fill="#ffb36b"/><path d="M10 42c3-10 25-10 28 0" fill="#0865e8"/><path d="M15 14c4-9 19-8 22 1-3 4-15 5-22-1Z" fill="#16233d"/></svg>
+                        {% endif %}
+                    </span>
                     <div><strong>{{ profile.full_name|default:user.username }}</strong><small>{{ profile.department|default:"Student" }}</small></div>
                 </div>
             </div>
@@ -59,50 +68,59 @@
         </section>
 
         <section class="dashboard-summary-grid" aria-label="Academic overview">
-            <article class="summary-card blue"><span class="summary-icon notes"></span><div><small>Notes</small><strong>{{ stats.notes }}</strong><em>Total Notes</em></div><a href="#">View all</a></article>
-            <article class="summary-card green"><span class="summary-icon quizzes"></span><div><small>Quizzes</small><strong>{{ stats.quizzes }}</strong><em>Completed</em></div><a href="#">View all</a></article>
-            <article class="summary-card purple"><span class="summary-icon tutor"></span><div><small>AI Tutor Chats</small><strong>{{ stats.activities }}</strong><em>This Month</em></div><a href="#">View all</a></article>
-            <article class="summary-card orange"><span class="summary-icon resume"></span><div><small>Resume</small><strong>{{ stats.resume_progress }}%</strong><em>Profile Strength</em></div><a href="#">Continue</a></article>
-            <article class="summary-card cyan"><span class="summary-icon interview"></span><div><small>Interviews</small><strong>{{ stats.interviews }}</strong><em>Mock Completed</em></div><a href="#">View all</a></article>
+            <article class="summary-card blue"><span class="summary-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h7a4 4 0 0 1 4 4v12H9a4 4 0 0 0-4 4V4Z"/><path d="M19 4h-3a4 4 0 0 0-4 4v12h3a4 4 0 0 1 4 4V4Z"/></svg></span><div><small>Notes</small><strong>{{ display_stats.notes }}</strong><em>Total Notes</em></div><a href="{% url 'core:notes' %}">View all</a></article>
+            <article class="summary-card green"><span class="summary-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6"/><path d="M9 12h2"/><path d="M13 12h2"/><path d="M9 16h2"/><path d="M13 16h2"/></svg></span><div><small>Quizzes</small><strong>{{ display_stats.quizzes }}</strong><em>Completed</em></div><a href="{% url 'core:quizzes' %}">View all</a></article>
+            <article class="summary-card purple"><span class="summary-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4V5Z"/><path d="M9 10h.01"/><path d="M12 10h.01"/><path d="M15 10h.01"/></svg></span><div><small>AI Tutor Chats</small><strong>{{ display_stats.activities }}</strong><em>This Month</em></div><a href="{% url 'core:ai_tutor' %}">View all</a></article>
+            <article class="summary-card orange"><span class="summary-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4"/><path d="M10 12h4"/><path d="M10 16h4"/></svg></span><div><small>Resume</small><strong>{{ display_stats.resume_progress }}%</strong><em>Profile Strength</em></div><a href="{% url 'core:resume_builder' %}">Continue</a></article>
+            <article class="summary-card cyan"><span class="summary-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="11" rx="2"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M8 13h8"/></svg></span><div><small>Interviews</small><strong>{{ display_stats.interviews }}</strong><em>Mock Completed</em></div><a href="{% url 'core:mock_interview' %}">View all</a></article>
         </section>
 
         <section class="dashboard-content-grid">
             <article class="dashboard-widget recent-notes-widget">
-                <div class="widget-title"><h2>Recent Notes</h2><a href="#">View all</a></div>
+                <div class="widget-title"><h2><svg class="widget-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4"/></svg>Recent Notes</h2><a href="{% url 'core:notes' %}">View all</a></div>
                 <div class="note-list">
                     {% for note in recent_notes %}
-                        <div class="note-row"><span class="note-badge color-{{ forloop.counter }}"></span><div><strong>{{ note.title }}</strong><small>{{ note.updated_at|date:"M d, Y" }} - Study Notes</small></div></div>
+                        <div class="note-row"><span class="note-badge color-{{ forloop.counter }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>{{ note.title }}</strong><small>{{ note.updated_at|date:"M d, Y" }} - Study Notes</small></div></div>
                     {% empty %}
-                        <div class="note-row"><span class="note-badge color-1"></span><div><strong>Data Structures - Linked List</strong><small>May 20, 2026 - Computer Science</small></div></div>
-                        <div class="note-row"><span class="note-badge color-2"></span><div><strong>System Design Basics</strong><small>May 18, 2026 - Software Engineering</small></div></div>
-                        <div class="note-row"><span class="note-badge color-3"></span><div><strong>Database Normalization</strong><small>May 15, 2026 - Database Systems</small></div></div>
-                        <div class="note-row"><span class="note-badge color-4"></span><div><strong>Dynamic Programming</strong><small>May 12, 2026 - Algorithms</small></div></div>
+                        <div class="note-row"><span class="note-badge color-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>Data Structures - Linked List</strong><small>May 20, 2026 - Computer Science</small></div></div>
+                        <div class="note-row"><span class="note-badge color-2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>System Design Basics</strong><small>May 18, 2026 - Software Engineering</small></div></div>
+                        <div class="note-row"><span class="note-badge color-3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>Database Normalization</strong><small>May 15, 2026 - Database Systems</small></div></div>
+                        <div class="note-row"><span class="note-badge color-4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>Dynamic Programming</strong><small>May 12, 2026 - Algorithms</small></div></div>
                     {% endfor %}
                 </div>
             </article>
 
             <article class="dashboard-widget quiz-widget">
-                <div class="widget-title"><h2>Quiz Performance</h2><span>This Month</span></div>
+                <div class="widget-title"><h2><svg class="widget-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 3 5-7"/></svg>Quiz Performance</h2><span>This Month</span></div>
                 <div class="quiz-chart" aria-label="Quiz performance line chart">
-                    <svg viewBox="0 0 320 150" role="img">
-                        <polyline points="8,103 47,91 84,111 121,72 160,44 201,75 241,53 282,27 312,42" fill="none" stroke="#2f72ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                        <g fill="#fff" stroke="#2f72ff" stroke-width="3"><circle cx="8" cy="103" r="5"/><circle cx="47" cy="91" r="5"/><circle cx="84" cy="111" r="5"/><circle cx="121" cy="72" r="5"/><circle cx="160" cy="44" r="5"/><circle cx="201" cy="75" r="5"/><circle cx="241" cy="53" r="5"/><circle cx="282" cy="27" r="5"/><circle cx="312" cy="42" r="5"/></g>
+                    <div class="chart-y-label">Score %</div>
+                    <svg viewBox="0 0 360 178" role="img">
+                        <g class="chart-grid">
+                            <path d="M40 16H340"/><path d="M40 50H340"/><path d="M40 84H340"/><path d="M40 118H340"/><path d="M40 152H340"/>
+                        </g>
+                        <g class="chart-axis">
+                            <text x="14" y="20">100</text><text x="20" y="54">75</text><text x="20" y="88">50</text><text x="20" y="122">25</text><text x="24" y="156">0</text>
+                            <text x="40" y="172">May 1</text><text x="142" y="172">May 7</text><text x="242" y="172">May 14</text><text x="308" y="172">May 21</text>
+                        </g>
+                        <path class="chart-fill" d="M44 108 78 94 112 112 146 77 180 42 214 74 248 90 282 55 316 31 340 45V152H44Z"/>
+                        <polyline class="chart-line" points="44,108 78,94 112,112 146,77 180,42 214,74 248,90 282,55 316,31 340,45"/>
+                        <g class="chart-points"><circle cx="44" cy="108" r="4"/><circle cx="78" cy="94" r="4"/><circle cx="112" cy="112" r="4"/><circle cx="146" cy="77" r="4"/><circle cx="180" cy="42" r="4"/><circle cx="214" cy="74" r="4"/><circle cx="248" cy="90" r="4"/><circle cx="282" cy="55" r="4"/><circle cx="316" cy="31" r="4"/><circle cx="340" cy="45" r="4"/></g>
                     </svg>
                 </div>
                 <div class="quiz-metrics">
-                    <div><small>Average Score</small><strong>{{ stats.average_quiz_score }}%</strong></div>
-                    <div><small>Highest Score</small><strong>{{ stats.highest_quiz_score }}%</strong></div>
-                    <div><small>Quizzes Taken</small><strong>{{ stats.quizzes }}</strong></div>
+                    <div><small>Average Score</small><strong>{{ display_stats.average_quiz_score }}%</strong></div>
+                    <div><small>Highest Score</small><strong>{{ display_stats.highest_quiz_score }}%</strong></div>
+                    <div><small>Quizzes Taken</small><strong>{{ display_stats.quizzes }}</strong></div>
                 </div>
             </article>
 
             <article class="dashboard-widget tasks-widget">
-                <div class="widget-title"><h2>Upcoming Tasks</h2><a href="#">View all</a></div>
+                <div class="widget-title"><h2><svg class="widget-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="m9 9 1.5 1.5L15 6"/><path d="M9 16h6"/></svg>Upcoming Tasks</h2><span>View all</span></div>
                 <div class="task-list">
-                    <div class="task-row orange"><span></span><div><strong>Complete Python Quiz</strong><small>May 22, 2026 - Algorithms</small></div></div>
-                    <div class="task-row green"><span></span><div><strong>Review OS Notes</strong><small>May 24, 2026 - Operating Systems</small></div></div>
-                    <div class="task-row pink"><span></span><div><strong>Mock Interview Practice</strong><small>May 25, 2026 - Software Engineer</small></div></div>
-                    <div class="task-row blue"><span></span><div><strong>Update Resume</strong><small>May 28, 2026 - Career Prep</small></div></div>
+                    <div class="task-row orange"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7z"/><path d="M10 9h4"/><path d="M10 13h4"/></svg></span><div><strong>Complete Python Quiz</strong><small>May 22, 2026 - Algorithms</small></div></div>
+                    <div class="task-row green"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 12 3 3 7-7"/><circle cx="12" cy="12" r="9"/></svg></span><div><strong>Review OS Notes</strong><small>May 24, 2026 - Operating Systems</small></div></div>
+                    <div class="task-row pink"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v4a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4Z"/><path d="M5 11a7 7 0 0 0 14 0"/></svg></span><div><strong>Mock Interview Practice</strong><small>May 25, 2026 - Software Engineer</small></div></div>
+                    <div class="task-row blue"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4"/></svg></span><div><strong>Update Resume</strong><small>May 28, 2026 - Career Prep</small></div></div>
                 </div>
             </article>
         </section>
@@ -110,11 +128,11 @@
         <section class="continue-learning">
             <div class="widget-title"><h2>Continue Learning</h2></div>
             <div class="learning-grid">
-                <a class="learning-card blue" href="#"><span class="feature-mini bot-mini"></span><strong>AI Tutor</strong><small>Ask anything and get instant AI-powered answers.</small><em>Start Chat</em></a>
-                <a class="learning-card orange" href="#"><span class="feature-mini note-mini"></span><strong>Notes</strong><small>Create, organize and manage your study notes.</small><em>Go to Notes</em></a>
-                <a class="learning-card purple" href="#"><span class="feature-mini chart-mini"></span><strong>Quizzes</strong><small>Practice quizzes and test your knowledge.</small><em>Start Quiz</em></a>
-                <a class="learning-card cyan" href="#"><span class="feature-mini interview-mini"></span><strong>AI Mock Interview</strong><small>Practice interviews and get AI feedback.</small><em>Start Interview</em></a>
-                <a class="learning-card green" href="#"><span class="feature-mini resume-mini"></span><strong>Resume Builder</strong><small>Build a professional resume with AI assistance.</small><em>Edit Resume</em></a>
+                <a class="learning-card blue" href="{% url 'core:ai_tutor' %}"><span class="learning-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="11" rx="4"/><path d="M12 8V4"/><path d="M9 13h.01"/><path d="M15 13h.01"/></svg></span><strong>AI Tutor</strong><small>Ask anything and get instant AI-powered answers.</small><em>Start Chat</em></a>
+                <a class="learning-card orange" href="{% url 'core:notes' %}"><span class="learning-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7z"/><path d="M10 8h4"/><path d="M10 12h4"/><path d="M10 16h4"/></svg></span><strong>Notes</strong><small>Create, organize and manage your study notes.</small><em>Go to Notes</em></a>
+                <a class="learning-card purple" href="{% url 'core:quizzes' %}"><span class="learning-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11 11 13l4-5"/><rect x="5" y="3" width="14" height="18" rx="3"/></svg></span><strong>Quizzes</strong><small>Practice quizzes and test your knowledge.</small><em>Start Quiz</em></a>
+                <a class="learning-card cyan" href="{% url 'core:mock_interview' %}"><span class="learning-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v4a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4Z"/><path d="M5 11a7 7 0 0 0 14 0"/></svg></span><strong>AI Mock Interview</strong><small>Practice interviews and get AI feedback.</small><em>Start Interview</em></a>
+                <a class="learning-card green" href="{% url 'core:resume_builder' %}"><span class="learning-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4"/><path d="M10 13h4"/></svg></span><strong>Resume Builder</strong><small>Build a professional resume with AI assistance.</small><em>Edit Resume</em></a>
             </div>
         </section>
     </section>

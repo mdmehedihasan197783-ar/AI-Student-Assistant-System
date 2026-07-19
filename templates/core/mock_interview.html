@@ -1,0 +1,30 @@
+{% extends "core/app_shell.html" %}
+
+{% block title %}AI Mock Interview | AI Student Assistant System{% endblock %}
+
+{% block app_content %}
+<section class="module-header">
+    <div><h1>AI Mock Interview</h1><p>Practice interview answers and save feedback history.</p></div>
+</section>
+
+<section class="module-grid two-col">
+    <form class="module-card" method="post">
+        {% csrf_token %}
+        <h2>Practice Interview</h2>
+        <label class="form-label" for="{{ form.role.id_for_label }}">Target Role</label>{{ form.role }}
+        <label class="form-label" for="{{ form.answer.id_for_label }}">Answer</label>{{ form.answer }}
+        <button class="primary-btn module-submit" type="submit">Save Practice</button>
+    </form>
+
+    <article class="module-card">
+        <h2>Interview History</h2>
+        <div class="record-list">
+            {% for interview in interviews %}
+                <div class="record-item"><strong>{{ interview.role }} - Score {{ interview.score }}</strong><p>{{ interview.feedback }}</p><small>{{ interview.completed_at|date:"M d, Y H:i" }}</small></div>
+            {% empty %}
+                <div class="record-item"><strong>No interviews yet</strong><p>Submit your first practice answer to receive saved feedback.</p></div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

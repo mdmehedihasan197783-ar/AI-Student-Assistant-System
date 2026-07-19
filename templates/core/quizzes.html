@@ -1,0 +1,31 @@
+{% extends "core/app_shell.html" %}
+
+{% block title %}Quizzes | AI Student Assistant System{% endblock %}
+
+{% block app_content %}
+<section class="module-header">
+    <div><h1>Quizzes</h1><p>Save quiz results and track learning performance.</p></div>
+</section>
+
+<section class="module-grid two-col">
+    <form class="module-card" method="post">
+        {% csrf_token %}
+        <h2>Add Quiz Result</h2>
+        <label class="form-label" for="{{ form.topic.id_for_label }}">Topic</label>{{ form.topic }}
+        <label class="form-label" for="{{ form.score.id_for_label }}">Score</label>{{ form.score }}
+        <label class="form-label" for="{{ form.total_questions.id_for_label }}">Total Questions</label>{{ form.total_questions }}
+        <button class="primary-btn module-submit" type="submit">Save Result</button>
+    </form>
+
+    <article class="module-card">
+        <h2>Quiz History</h2>
+        <div class="record-list">
+            {% for quiz in quiz_results %}
+                <div class="record-item"><strong>{{ quiz.topic }}</strong><p>Score: {{ quiz.score }}/{{ quiz.total_questions }}</p><small>{{ quiz.taken_at|date:"M d, Y H:i" }}</small></div>
+            {% empty %}
+                <div class="record-item"><strong>No quiz results yet</strong><p>Save your first quiz result to start tracking progress.</p></div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

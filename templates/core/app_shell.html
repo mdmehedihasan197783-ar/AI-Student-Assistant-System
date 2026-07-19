@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<main class="student-dashboard-shell">
+    <aside class="student-sidebar">
+        <a class="dashboard-logo" href="{% url 'core:dashboard' %}" aria-label="AI Student dashboard">
+            <svg viewBox="0 0 64 52" aria-hidden="true"><path fill="#0865e8" d="M2 17 31 3l31 14-31 14L2 17Z"/><path fill="#0b4ea9" d="M13 23v15c12 9 26 9 37 0V23L31 33 13 23Z"/><path stroke="#0865e8" stroke-width="3" d="M57 20v18"/><circle cx="57" cy="41" r="3" fill="#0865e8"/></svg>
+            <span><strong><b>AI</b> Student</strong><small>Assistant System</small></span>
+        </a>
+
+        <nav class="dashboard-menu" aria-label="Student dashboard navigation">
+            <a class="{% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'core:dashboard' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h5v-6h4v6h5V9.5"/></svg>Dashboard</a>
+            <a class="{% if active_page == 'ai_tutor' %}active{% endif %}" href="{% url 'core:ai_tutor' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8V4"/><path d="M8 4h8"/><rect x="5" y="8" width="14" height="11" rx="4"/><path d="M9 13h.01"/><path d="M15 13h.01"/><path d="M10 17h4"/><path d="M3 13h2"/><path d="M19 13h2"/></svg>AI Tutor</a>
+            <a class="{% if active_page == 'notes' %}active{% endif %}" href="{% url 'core:notes' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4"/><path d="M9 11h6"/><path d="M9 15h6"/></svg>Notes</a>
+            <a class="{% if active_page == 'quizzes' %}active{% endif %}" href="{% url 'core:quizzes' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11 11 13l4-5"/><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M8 17h8"/></svg>Quizzes</a>
+            <a class="{% if active_page == 'resume' %}active{% endif %}" href="{% url 'core:resume_builder' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4"/><path d="M9 12h6"/><path d="M9 16h6"/><path d="M9 8h2"/></svg>Resume Builder</a>
+            <a class="{% if active_page == 'interview' %}active{% endif %}" href="{% url 'core:mock_interview' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v4a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4Z"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg>AI Mock Interview</a>
+            <a class="{% if active_page == 'profile' %}active{% endif %}" href="{% url 'core:profile' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profile</a>
+            <a class="{% if active_page == 'settings' %}active{% endif %}" href="{% url 'core:settings' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.12 2.12-.04-.04a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.66V21h-3v-.06a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-1.98.36l-.04.04-2.12-2.12.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.66-1.1H3v-3h.06A1.8 1.8 0 0 0 4.72 9.8a1.8 1.8 0 0 0-.36-1.98l-.04-.04 2.12-2.12.04.04a1.8 1.8 0 0 0 1.98.36 1.8 1.8 0 0 0 1.1-1.66V4h3v.06a1.8 1.8 0 0 0 1.1 1.66 1.8 1.8 0 0 0 1.98-.36l.04-.04 2.12 2.12-.04.04a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.66 1.1H21v3h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg>Settings</a>
+            <a href="{% url 'core:logout' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5v16h5"/><path d="M14 8l4 4-4 4"/><path d="M8 12h10"/></svg>Logout</a>
+        </nav>
+    </aside>
+
+    <section class="student-dashboard-main">
+        <header class="dashboard-topbar">
+            <button class="sidebar-toggle" type="button" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+            <label class="dashboard-search" aria-label="Search">
+                <input type="search" placeholder="Search anything...">
+                <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
+            </label>
+            <div class="dashboard-user-tools">
+                <button class="notification-btn" type="button" aria-label="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg><span></span></button>
+                <div class="dashboard-user">
+                    <span class="user-avatar">{% if profile.photo %}<img src="{{ profile.photo.url }}" alt="{{ profile.full_name }} profile photo">{% else %}<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#eef5ff"/><circle cx="24" cy="18" r="8" fill="#ffb36b"/><path d="M10 42c3-10 25-10 28 0" fill="#0865e8"/><path d="M15 14c4-9 19-8 22 1-3 4-15 5-22-1Z" fill="#16233d"/></svg>{% endif %}</span>
+                    <div><strong>{{ profile.full_name|default:user.username }}</strong><small>{{ profile.department|default:"Student" }}</small></div>
+                </div>
+            </div>
+        </header>
+
+        {% block app_content %}{% endblock %}
+    </section>
+</main>
+{% endblock %}

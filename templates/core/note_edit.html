@@ -1,0 +1,19 @@
+{% extends "core/app_shell.html" %}
+
+{% block title %}Edit Note | AI Student Assistant System{% endblock %}
+
+{% block app_content %}
+<section class="module-header">
+    <div><h1>Edit Note</h1><p>Update your saved study material.</p></div>
+    <a class="outline-btn" href="{% url 'core:notes' %}">Back to Notes</a>
+</section>
+
+<form class="module-card module-form-wide" method="post">
+    {% csrf_token %}
+    <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
+    {{ form.title }}
+    <label class="form-label" for="{{ form.content.id_for_label }}">Content</label>
+    {{ form.content }}
+    <button class="primary-btn module-submit" type="submit">Update Note</button>
+</form>
+{% endblock %}

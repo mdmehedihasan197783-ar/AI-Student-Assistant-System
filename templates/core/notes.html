@@ -1,0 +1,39 @@
+{% extends "core/app_shell.html" %}
+
+{% block title %}Notes | AI Student Assistant System{% endblock %}
+
+{% block app_content %}
+<section class="module-header">
+    <div><h1>Notes</h1><p>Create, search, edit, and delete study notes stored in PostgreSQL.</p></div>
+    <form class="module-search" method="get"><input name="q" value="{{ query }}" placeholder="Search notes..."><button type="submit">Search</button></form>
+</section>
+
+<section class="module-grid two-col">
+    <form class="module-card" method="post">
+        {% csrf_token %}
+        <h2>Create Note</h2>
+        <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
+        {{ form.title }}
+        <label class="form-label" for="{{ form.content.id_for_label }}">Content</label>
+        {{ form.content }}
+        <button class="primary-btn module-submit" type="submit">Save Note</button>
+    </form>
+
+    <article class="module-card">
+        <h2>Saved Notes</h2>
+        <div class="record-list">
+            {% for note in notes %}
+                <div class="record-item action-record">
+                    <div><strong>{{ note.title }}</strong><p>{{ note.content|truncatechars:140 }}</p><small>{{ note.updated_at|date:"M d, Y H:i" }}</small></div>
+                    <div class="record-actions">
+                        <a href="{% url 'core:note_edit' note.pk %}">Edit</a>
+                        <form method="post" action="{% url 'core:note_delete' note.pk %}">{% csrf_token %}<button type="submit">Delete</button></form>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="record-item"><strong>No notes found</strong><p>Add your first study note using the form.</p></div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

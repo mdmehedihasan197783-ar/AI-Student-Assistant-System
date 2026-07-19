@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import StudentProfile, UserActivity
+from .models import AIChat, MockInterview, Note, QuizResult, Resume, StudentProfile, UserActivity
 
 
 class LandingPageTests(TestCase):
@@ -94,3 +94,36 @@ class StudentAuthTests(TestCase):
         self.assertEqual(profile.skills, "Python, Django, PostgreSQL")
         self.assertEqual(profile.learning_goals, "Build a complete student assistant system")
         self.assertTrue(UserActivity.objects.filter(user=user, action=UserActivity.Action.PROFILE_UPDATED).exists())
+
+    def test_feature_pages_save_student_data(self):
+        user = User.objects.create_user(username="student@example.com", email="student@example.com", password="test-pass-123")
+        StudentProfile.objects.create(
+            user=user,
+            full_name="Feature Student",
+            university="AI University",
+            department="CSE",
+            semester="7th",
+        )
+        self.client.login(username="student@example.com", password="test-pass-123")
+
+        self.client.post(reverse("core:ai_tutor"), {"question": "What is database normalization?"})
+        self.client.post(reverse("core:notes"), {"title": "Normalization", "content": "Database normalization notes"})
+        self.client.post(reverse("core:quizzes"), {"topic": "DBMS", "score": 8, "total_questions": 10})
+        self.client.post(
+            reverse("core:resume_builder"),
+            {
+                "title": "Software Resume",
+                "education": "BSc in CSE",
+                "skills": "Python, Django",
+                "projects": "AI Student Assistant",
+                "experience": "Academic projects",
+                "progress": 80,
+            },
+        )
+        self.client.post(reverse("core:mock_interview"), {"role": "Software Engineer", "answer": "I solved a project using Django and PostgreSQL."})
+
+        self.assertTrue(AIChat.objects.filter(student=user).exists())
+        self.assertTrue(Note.objects.filter(student=user, title="Normalization").exists())
+        self.assertTrue(QuizResult.objects.filter(student=user, topic="DBMS").exists())
+        self.assertTrue(Resume.objects.filter(student=user, title="Software Resume").exists())
+        self.assertTrue(MockInterview.objects.filter(student=user, role="Software Engineer").exists())

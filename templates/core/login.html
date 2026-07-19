@@ -63,14 +63,17 @@
                 <div class="icon-field password-field">
                     <span class="field-icon lock-icon"></span>
                     <input id="{{ form.password.id_for_label }}" name="{{ form.password.name }}" type="password" placeholder="Enter your password" required>
-                    <span class="eye-icon" aria-hidden="true"></span>
+                    <button class="password-toggle" type="button" data-password-toggle aria-label="Show password">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <span>Show</span>
+                    </button>
                 </div>
                 {% if form.password.errors %}<div class="form-error">{{ form.password.errors|striptags }}</div>{% endif %}
             </div>
 
             <div class="login-options">
                 <label><input type="checkbox" name="remember"> Remember me</label>
-                <a href="#">Forgot Password?</a>
+                <span class="disabled-auth-link">Forgot Password?</span>
             </div>
 
             <button class="create-account-btn login-btn" type="submit">Login</button>
@@ -82,4 +85,8 @@
         </form>
     </section>
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'core/js/auth.js' %}"></script>
 {% endblock %}

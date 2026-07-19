@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import MockInterview, Note, QuizResult, Resume, StudentProfile, UserActivity
+from .models import AIChat, MockInterview, Note, QuizResult, Resume, StudentProfile, UserActivity
 
 
 @admin.register(StudentProfile)
@@ -13,6 +13,12 @@ class StudentProfileAdmin(admin.ModelAdmin):
 class NoteAdmin(admin.ModelAdmin):
     list_display = ("title", "student", "updated_at")
     search_fields = ("title", "student__email")
+
+
+@admin.register(AIChat)
+class AIChatAdmin(admin.ModelAdmin):
+    list_display = ("student", "created_at")
+    search_fields = ("student__email", "question", "answer")
 
 
 @admin.register(QuizResult)
