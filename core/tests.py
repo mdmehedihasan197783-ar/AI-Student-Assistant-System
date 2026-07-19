@@ -77,7 +77,9 @@ class StudentAuthTests(TestCase):
         response = self.client.post(
             reverse("core:profile"),
             {
+                "form_type": "profile",
                 "full_name": "Existing Student",
+                "email": "student@example.com",
                 "university": "AI University",
                 "department": "CSE",
                 "semester": "6th",
@@ -88,7 +90,7 @@ class StudentAuthTests(TestCase):
             follow=True,
         )
 
-        self.assertRedirects(response, reverse("core:dashboard"))
+        self.assertRedirects(response, reverse("core:profile"))
         profile = StudentProfile.objects.get(user=user)
         self.assertEqual(profile.semester, "6th")
         self.assertEqual(profile.skills, "Python, Django, PostgreSQL")

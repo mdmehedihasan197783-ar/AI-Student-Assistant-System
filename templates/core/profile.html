@@ -1,26 +1,179 @@
 {% extends "core/app_shell.html" %}
 
-{% block title %}Profile | AI Student Assistant System{% endblock %}
+{% block title %}My Profile | AI Student Assistant System{% endblock %}
 
 {% block app_content %}
-<section class="module-header">
-    <div><h1>Profile</h1><p>Manage personal, academic, skills, and learning goal information.</p></div>
-    <a class="outline-btn" href="{% url 'core:dashboard' %}">Dashboard</a>
-</section>
-
-<form class="module-card module-form-wide" method="post" enctype="multipart/form-data" novalidate>
-    {% csrf_token %}
-    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
-    <div class="profile-form-grid">
-        <div><label class="form-label" for="{{ form.full_name.id_for_label }}">Full name</label>{{ form.full_name }}</div>
-        <div><label class="form-label" for="{{ form.university.id_for_label }}">University</label>{{ form.university }}</div>
-        <div><label class="form-label" for="{{ form.department.id_for_label }}">Department</label>{{ form.department }}</div>
-        <div><label class="form-label" for="{{ form.semester.id_for_label }}">Semester</label>{{ form.semester }}</div>
-        <div><label class="form-label" for="{{ form.career_goal.id_for_label }}">Career goal</label>{{ form.career_goal }}</div>
-        <div><label class="form-label" for="{{ form.photo.id_for_label }}">Profile photo</label>{{ form.photo }}</div>
-        <div class="wide-field"><label class="form-label" for="{{ form.skills.id_for_label }}">Skills</label>{{ form.skills }}</div>
-        <div class="wide-field"><label class="form-label" for="{{ form.learning_goals.id_for_label }}">Learning goals</label>{{ form.learning_goals }}</div>
+<section class="profile-account-page" data-profile-tabs>
+    <div class="profile-page-title">
+        <div>
+            <h1>My Profile</h1>
+            <p>Choose what you want to manage from your account settings.</p>
+        </div>
+        <a class="profile-logout-btn" href="{% url 'core:logout' %}">Log Out</a>
     </div>
-    <button class="primary-btn module-submit" type="submit">Save Profile</button>
-</form>
+
+    <div class="profile-tab-list" role="tablist" aria-label="Profile settings sections">
+        <button class="profile-tab-btn {% if active_profile_tab != 'password' and active_profile_tab != 'delete' %}active{% endif %}" type="button" data-profile-tab="details">Profile Information</button>
+        <button class="profile-tab-btn {% if active_profile_tab == 'password' %}active{% endif %}" type="button" data-profile-tab="password">Change Password</button>
+        <button class="profile-tab-btn danger {% if active_profile_tab == 'delete' %}active{% endif %}" type="button" data-profile-tab="delete">Delete Account</button>
+    </div>
+
+    <div class="profile-tab-panel {% if active_profile_tab != 'password' and active_profile_tab != 'delete' %}active{% endif %}" data-profile-panel="details">
+        <section class="profile-section">
+            <div class="profile-section-label">
+                <h2>Profile Picture</h2>
+            </div>
+            <div class="profile-picture-panel">
+                <div class="profile-picture-wrap">
+                    {% if profile.photo %}
+                        <img src="{{ profile.photo.url }}" alt="{{ profile.full_name|default:user.username }} profile photo">
+                    {% else %}
+                        <svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="48" fill="#eef5ff"/><circle cx="48" cy="36" r="16" fill="#ffb36b"/><path d="M20 84c7-23 49-23 56 0" fill="#0865e8"/><path d="M30 29c9-17 36-15 43 2-7 9-30 10-43-2Z" fill="#16233d"/></svg>
+                    {% endif %}
+                    <label class="profile-camera-btn" for="{{ form.photo.id_for_label }}" aria-label="Upload profile photo">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7 9.5 5h5L16 7h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3Z"/><circle cx="12" cy="13" r="3"/></svg>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <section class="profile-section">
+            <div class="profile-section-label">
+                <h2>Update Profile Details</h2>
+            </div>
+            <form class="profile-management-card" method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="profile">
+                {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+
+                <div class="profile-detail-grid">
+                    <div class="wide-field">
+                        <label class="form-label" for="{{ form.full_name.id_for_label }}">Name <span>*</span></label>
+                        {{ form.full_name }}
+                        {% if form.full_name.errors %}<div class="form-error">{{ form.full_name.errors|striptags }}</div>{% endif %}
+                    </div>
+                    <div>
+                        <label class="form-label" for="{{ form.email.id_for_label }}">Email <span>*</span></label>
+                        {{ form.email }}
+                        {% if form.email.errors %}<div class="form-error">{{ form.email.errors|striptags }}</div>{% endif %}
+                    </div>
+                    <div>
+                        <label class="form-label" for="{{ form.university.id_for_label }}">University <span>*</span></label>
+                        {{ form.university }}
+                        {% if form.university.errors %}<div class="form-error">{{ form.university.errors|striptags }}</div>{% endif %}
+                    </div>
+                    <div>
+                        <label class="form-label" for="{{ form.department.id_for_label }}">Department <span>*</span></label>
+                        {{ form.department }}
+                        {% if form.department.errors %}<div class="form-error">{{ form.department.errors|striptags }}</div>{% endif %}
+                    </div>
+                    <div>
+                        <label class="form-label" for="{{ form.semester.id_for_label }}">Semester <span>*</span></label>
+                        {{ form.semester }}
+                        {% if form.semester.errors %}<div class="form-error">{{ form.semester.errors|striptags }}</div>{% endif %}
+                    </div>
+                    <div>
+                        <label class="form-label" for="{{ form.career_goal.id_for_label }}">Career Goal</label>
+                        {{ form.career_goal }}
+                        {% if form.career_goal.errors %}<div class="form-error">{{ form.career_goal.errors|striptags }}</div>{% endif %}
+                    </div>
+                    <div class="wide-field profile-photo-field">
+                        <label class="form-label" for="{{ form.photo.id_for_label }}">Profile Photo</label>
+                        {{ form.photo }}
+                        {% if form.photo.errors %}<div class="form-error">{{ form.photo.errors|striptags }}</div>{% endif %}
+                    </div>
+                    <div class="wide-field">
+                        <label class="form-label" for="{{ form.skills.id_for_label }}">Skills</label>
+                        {{ form.skills }}
+                        {% if form.skills.errors %}<div class="form-error">{{ form.skills.errors|striptags }}</div>{% endif %}
+                    </div>
+                    <div class="wide-field">
+                        <label class="form-label" for="{{ form.learning_goals.id_for_label }}">Learning Goals</label>
+                        {{ form.learning_goals }}
+                        {% if form.learning_goals.errors %}<div class="form-error">{{ form.learning_goals.errors|striptags }}</div>{% endif %}
+                    </div>
+                </div>
+
+                <div class="profile-card-actions">
+                    <button class="profile-save-btn" type="submit">Save</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div class="profile-tab-panel {% if active_profile_tab == 'password' %}active{% endif %}" data-profile-panel="password">
+        <section class="profile-section">
+            <div class="profile-section-label">
+                <h2>Change Password</h2>
+            </div>
+            <form class="profile-management-card" method="post" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="password">
+                {% if password_form.non_field_errors %}<div class="alert alert-danger">{{ password_form.non_field_errors }}</div>{% endif %}
+
+                <label class="form-label" for="{{ password_form.old_password.id_for_label }}">Current Password</label>
+                {{ password_form.old_password }}
+                {% if password_form.old_password.errors %}<div class="form-error">{{ password_form.old_password.errors|striptags }}</div>{% endif %}
+
+                <label class="form-label" for="{{ password_form.new_password1.id_for_label }}">New Password</label>
+                {{ password_form.new_password1 }}
+                {% if password_form.new_password1.errors %}<div class="form-error">{{ password_form.new_password1.errors|striptags }}</div>{% endif %}
+                <small class="profile-help-text">Minimum 8 characters required.</small>
+
+                <label class="form-label" for="{{ password_form.new_password2.id_for_label }}">Retype New Password</label>
+                {{ password_form.new_password2 }}
+                {% if password_form.new_password2.errors %}<div class="form-error">{{ password_form.new_password2.errors|striptags }}</div>{% endif %}
+
+                <div class="profile-card-actions">
+                    <button class="profile-save-btn" type="submit">Save</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div class="profile-tab-panel {% if active_profile_tab == 'delete' %}active{% endif %}" data-profile-panel="delete">
+        <section class="profile-section delete-section">
+            <div class="profile-section-label">
+                <h2>Delete Profile</h2>
+            </div>
+            <form class="profile-management-card" method="post" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="delete">
+                {% if delete_form.non_field_errors %}<div class="alert alert-danger">{{ delete_form.non_field_errors }}</div>{% endif %}
+
+                <label class="delete-confirm-line">
+                    {{ delete_form.confirm_delete }}
+                    <span>I agree to delete my profile</span>
+                </label>
+                {% if delete_form.confirm_delete.errors %}<div class="form-error">{{ delete_form.confirm_delete.errors|striptags }}</div>{% endif %}
+
+                <label class="form-label" for="{{ delete_form.current_password.id_for_label }}">Current Password</label>
+                {{ delete_form.current_password }}
+                {% if delete_form.current_password.errors %}<div class="form-error">{{ delete_form.current_password.errors|striptags }}</div>{% endif %}
+
+                <p class="delete-warning">Please note that if you choose to delete your own profile, your learner account will no longer exist. You would lose access to the courses and resources provided.</p>
+                <div class="profile-card-actions">
+                    <button class="profile-delete-btn" type="submit">Delete</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.querySelectorAll("[data-profile-tabs]").forEach((profileTabs) => {
+        const buttons = profileTabs.querySelectorAll("[data-profile-tab]");
+        const panels = profileTabs.querySelectorAll("[data-profile-panel]");
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const target = button.dataset.profileTab;
+                buttons.forEach((item) => item.classList.toggle("active", item === button));
+                panels.forEach((panel) => panel.classList.toggle("active", panel.dataset.profilePanel === target));
+            });
+        });
+    });
+</script>
 {% endblock %}

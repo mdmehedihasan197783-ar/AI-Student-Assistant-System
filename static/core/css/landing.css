@@ -12,8 +12,12 @@ button { font:inherit; }
 .brand span { display:flex; flex-direction:column; line-height:1.05; }
 .brand strong { font-size:18px; font-weight:700; }.brand strong b { color:var(--blue); }.brand small { margin-top:3px; padding-left:2px; font-size:10px; font-weight:600; }
 .main-nav { display:flex; gap:58px; margin:auto; }
-.main-nav a { position:relative; padding:28px 0 26px; font-size:14px; font-weight:600; }
-.main-nav a.active { color:var(--blue); }.main-nav a.active::after { content:""; position:absolute; left:50%; bottom:17px; width:4px; height:4px; transform:translateX(-50%); background:var(--blue); border-radius:50%; }
+.main-nav a { position:relative; padding:28px 0 26px; font-size:14px; font-weight:600; transition:color .16s ease; }
+.main-nav a::after { content:""; position:absolute; left:50%; bottom:17px; width:4px; height:4px; transform:translateX(-50%); background:var(--blue); border-radius:50%; opacity:0; transition:opacity .16s ease; }
+.main-nav a:hover,.main-nav a:focus,.main-nav a.active { color:var(--blue); }
+.main-nav a:hover::after,.main-nav a:focus::after,.main-nav a.active::after { opacity:1; }
+.main-nav:hover a.active:not(:hover) { color:inherit; }
+.main-nav:hover a.active:not(:hover)::after { opacity:0; }
 .auth-actions { display:flex; gap:13px; margin-left:64px; }
 .primary-btn,.outline-btn { min-width:110px; height:39px; display:inline-flex; align-items:center; justify-content:center; padding:0 22px; border-radius:8px; border:1.5px solid var(--blue); font-size:14px; font-weight:600; cursor:pointer; }
 .primary-btn { color:#fff; background:linear-gradient(135deg,#0874f5,#0758d7); box-shadow:0 5px 12px rgba(8,101,232,.18); }.outline-btn { color:#075bd5; background:#fff; }

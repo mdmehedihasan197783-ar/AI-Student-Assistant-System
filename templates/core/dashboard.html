@@ -20,8 +20,7 @@
             <a href="{% url 'core:resume_builder' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4"/><path d="M9 12h6"/><path d="M9 16h6"/><path d="M9 8h2"/></svg>Resume Builder</a>
             <a href="{% url 'core:mock_interview' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v4a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4Z"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg>AI Mock Interview</a>
             <a href="{% url 'core:profile' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profile</a>
-            <a href="{% url 'core:settings' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.12 2.12-.04-.04a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.66V21h-3v-.06a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-1.98.36l-.04.04-2.12-2.12.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.66-1.1H3v-3h.06A1.8 1.8 0 0 0 4.72 9.8a1.8 1.8 0 0 0-.36-1.98l-.04-.04 2.12-2.12.04.04a1.8 1.8 0 0 0 1.98.36 1.8 1.8 0 0 0 1.1-1.66V4h3v.06a1.8 1.8 0 0 0 1.1 1.66 1.8 1.8 0 0 0 1.98-.36l.04-.04 2.12 2.12-.04.04a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.66 1.1H21v3h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg>Settings</a>
-            <a href="{% url 'core:logout' %}"><svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5v16h5"/><path d="M14 8l4 4-4 4"/><path d="M8 12h10"/></svg>Logout</a>
+            <a href="{% url 'core:settings' %}"><svg class="side-icon settings-premium-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8 14 5.5l3.2-.6 1.4 3-2.2 2.5 2.2 2.5-1.4 3-3.2-.6-2 2.7-2-2.7-3.2.6-1.4-3 2.2-2.5-2.2-2.5 1.4-3 3.2.6L12 2.8Z"/><circle cx="12" cy="10.4" r="3.2"/></svg>Settings</a>
         </nav>
 
         <blockquote class="dashboard-quote">
@@ -43,16 +42,22 @@
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg>
                     <span></span>
                 </button>
-                <div class="dashboard-user">
-                    <span class="user-avatar">
-                        {% if profile.photo %}
-                            <img src="{{ profile.photo.url }}" alt="{{ profile.full_name|default:user.username }} profile photo">
-                        {% else %}
-                            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#eef5ff"/><circle cx="24" cy="18" r="8" fill="#ffb36b"/><path d="M10 42c3-10 25-10 28 0" fill="#0865e8"/><path d="M15 14c4-9 19-8 22 1-3 4-15 5-22-1Z" fill="#16233d"/></svg>
-                        {% endif %}
-                    </span>
-                    <div><strong>{{ profile.full_name|default:user.username }}</strong><small>{{ profile.department|default:"Student" }}</small></div>
-                </div>
+                <details class="account-menu">
+                    <summary class="dashboard-user">
+                        <span class="user-avatar">
+                            {% if profile.photo %}
+                                <img src="{{ profile.photo.url }}" alt="{{ profile.full_name|default:user.username }} profile photo">
+                            {% else %}
+                                <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="24" fill="#eef5ff"/><circle cx="24" cy="18" r="8" fill="#ffb36b"/><path d="M10 42c3-10 25-10 28 0" fill="#0865e8"/><path d="M15 14c4-9 19-8 22 1-3 4-15 5-22-1Z" fill="#16233d"/></svg>
+                            {% endif %}
+                        </span>
+                        <span class="dashboard-user-meta"><strong>{{ profile.full_name|default:user.username }}</strong><small>{{ profile.department|default:"Student" }}</small></span>
+                    </summary>
+                    <div class="account-dropdown">
+                        <a href="{% url 'core:profile' %}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>My Profile</a>
+                        <a href="{% url 'core:logout' %}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5v16h5"/><path d="M14 8l4 4-4 4"/><path d="M8 12h10"/></svg>Log Out</a>
+                    </div>
+                </details>
             </div>
         </header>
 
@@ -82,10 +87,10 @@
                     {% for note in recent_notes %}
                         <div class="note-row"><span class="note-badge color-{{ forloop.counter }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>{{ note.title }}</strong><small>{{ note.updated_at|date:"M d, Y" }} - Study Notes</small></div></div>
                     {% empty %}
-                        <div class="note-row"><span class="note-badge color-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>Data Structures - Linked List</strong><small>May 20, 2026 - Computer Science</small></div></div>
-                        <div class="note-row"><span class="note-badge color-2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>System Design Basics</strong><small>May 18, 2026 - Software Engineering</small></div></div>
-                        <div class="note-row"><span class="note-badge color-3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>Database Normalization</strong><small>May 15, 2026 - Database Systems</small></div></div>
-                        <div class="note-row"><span class="note-badge color-4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l2 2v16H7z"/><path d="M10 10h4"/><path d="M10 14h4"/></svg></span><div><strong>Dynamic Programming</strong><small>May 12, 2026 - Algorithms</small></div></div>
+                        <div class="dashboard-empty-state">
+                            <strong>No notes yet</strong>
+                            <span>Your recent notes will appear here after you create them.</span>
+                        </div>
                     {% endfor %}
                 </div>
             </article>
@@ -93,19 +98,32 @@
             <article class="dashboard-widget quiz-widget">
                 <div class="widget-title"><h2><svg class="widget-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 3 5-7"/></svg>Quiz Performance</h2><span>This Month</span></div>
                 <div class="quiz-chart" aria-label="Quiz performance line chart">
-                    <div class="chart-y-label">Score %</div>
-                    <svg viewBox="0 0 360 178" role="img">
-                        <g class="chart-grid">
-                            <path d="M40 16H340"/><path d="M40 50H340"/><path d="M40 84H340"/><path d="M40 118H340"/><path d="M40 152H340"/>
-                        </g>
-                        <g class="chart-axis">
-                            <text x="14" y="20">100</text><text x="20" y="54">75</text><text x="20" y="88">50</text><text x="20" y="122">25</text><text x="24" y="156">0</text>
-                            <text x="40" y="172">May 1</text><text x="142" y="172">May 7</text><text x="242" y="172">May 14</text><text x="308" y="172">May 21</text>
-                        </g>
-                        <path class="chart-fill" d="M44 108 78 94 112 112 146 77 180 42 214 74 248 90 282 55 316 31 340 45V152H44Z"/>
-                        <polyline class="chart-line" points="44,108 78,94 112,112 146,77 180,42 214,74 248,90 282,55 316,31 340,45"/>
-                        <g class="chart-points"><circle cx="44" cy="108" r="4"/><circle cx="78" cy="94" r="4"/><circle cx="112" cy="112" r="4"/><circle cx="146" cy="77" r="4"/><circle cx="180" cy="42" r="4"/><circle cx="214" cy="74" r="4"/><circle cx="248" cy="90" r="4"/><circle cx="282" cy="55" r="4"/><circle cx="316" cy="31" r="4"/><circle cx="340" cy="45" r="4"/></g>
-                    </svg>
+                    {% if quiz_chart.points %}
+                        <div class="chart-y-label">Score %</div>
+                        <svg viewBox="0 0 360 178" role="img">
+                            <g class="chart-grid">
+                                <path d="M40 16H340"/><path d="M40 50H340"/><path d="M40 84H340"/><path d="M40 118H340"/><path d="M40 152H340"/>
+                            </g>
+                            <g class="chart-axis">
+                                <text x="14" y="20">100</text><text x="20" y="54">75</text><text x="20" y="88">50</text><text x="20" y="122">25</text><text x="24" y="156">0</text>
+                                {% for label in quiz_chart.labels %}
+                                    <text x="{{ label.x }}" y="172">{{ label.label }}</text>
+                                {% endfor %}
+                            </g>
+                            <path class="chart-fill" d="{{ quiz_chart.area_path }}"/>
+                            <polyline class="chart-line" points="{{ quiz_chart.polyline }}"/>
+                            <g class="chart-points">
+                                {% for point in quiz_chart.points %}
+                                    <circle cx="{{ point.x }}" cy="{{ point.y }}" r="4"><title>{{ point.score }}%</title></circle>
+                                {% endfor %}
+                            </g>
+                        </svg>
+                    {% else %}
+                        <div class="dashboard-empty-state chart-empty-state">
+                            <strong>No quiz performance yet</strong>
+                            <span>Complete quizzes to generate your real progress graph.</span>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="quiz-metrics">
                     <div><small>Average Score</small><strong>{{ display_stats.average_quiz_score }}%</strong></div>
@@ -117,10 +135,10 @@
             <article class="dashboard-widget tasks-widget">
                 <div class="widget-title"><h2><svg class="widget-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="m9 9 1.5 1.5L15 6"/><path d="M9 16h6"/></svg>Upcoming Tasks</h2><span>View all</span></div>
                 <div class="task-list">
-                    <div class="task-row orange"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7z"/><path d="M10 9h4"/><path d="M10 13h4"/></svg></span><div><strong>Complete Python Quiz</strong><small>May 22, 2026 - Algorithms</small></div></div>
-                    <div class="task-row green"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 12 3 3 7-7"/><circle cx="12" cy="12" r="9"/></svg></span><div><strong>Review OS Notes</strong><small>May 24, 2026 - Operating Systems</small></div></div>
-                    <div class="task-row pink"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v4a4 4 0 0 0 8 0V7a4 4 0 0 0-4-4Z"/><path d="M5 11a7 7 0 0 0 14 0"/></svg></span><div><strong>Mock Interview Practice</strong><small>May 25, 2026 - Software Engineer</small></div></div>
-                    <div class="task-row blue"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h4"/></svg></span><div><strong>Update Resume</strong><small>May 28, 2026 - Career Prep</small></div></div>
+                    <div class="dashboard-empty-state">
+                        <strong>No upcoming tasks</strong>
+                        <span>Task reminders will appear here when the system has real task data.</span>
+                    </div>
                 </div>
             </article>
         </section>

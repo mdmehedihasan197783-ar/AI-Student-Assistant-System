@@ -1,12 +1,14 @@
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import (
     AIChatForm,
     AccountSettingsForm,
+    DeleteAccountForm,
     MockInterviewForm,
     NoteForm,
     QuizResultForm,
@@ -119,15 +121,33 @@ def dashboard(request):
         "average_quiz_score": round(sum(quiz_percentages) / len(quiz_percentages)) if quiz_percentages else 0,
         "highest_quiz_score": max(quiz_percentages) if quiz_percentages else 0,
     }
-    display_stats = {
-        "notes": stats["notes"] or 24,
-        "quizzes": stats["quizzes"] or 12,
-        "activities": stats["activities"] or 36,
-        "resume_progress": stats["resume_progress"] or 80,
-        "interviews": stats["interviews"] or 2,
-        "average_quiz_score": stats["average_quiz_score"] or 78,
-        "highest_quiz_score": stats["highest_quiz_score"] or 92,
-    }
+
+    chart_quizzes = list(reversed(list(all_quizzes[:6])))
+    chart_points = []
+    chart_labels = []
+    if chart_quizzes:
+        x_min, x_max = 44, 340
+        y_min, y_max = 16, 152
+        x_step = (x_max - x_min) / (len(chart_quizzes) - 1) if len(chart_quizzes) > 1 else 0
+        for index, quiz in enumerate(chart_quizzes):
+            percentage = round((quiz.score / quiz.total_questions) * 100) if quiz.total_questions else 0
+            percentage = min(100, max(0, percentage))
+            x = round(x_min + (x_step * index))
+            y = round(y_max - ((percentage / 100) * (y_max - y_min)))
+            chart_points.append({"x": x, "y": y, "score": percentage})
+            chart_labels.append({"x": x, "label": quiz.taken_at.strftime("%b %d")})
+
+    chart_polyline = " ".join(f"{point['x']},{point['y']}" for point in chart_points)
+    chart_area_path = ""
+    if chart_points:
+        first_point = chart_points[0]
+        last_point = chart_points[-1]
+        chart_area_path = (
+            f"M{first_point['x']} {first_point['y']} "
+            + " ".join(f"L{point['x']} {point['y']}" for point in chart_points[1:])
+            + f" V152 H{first_point['x']} Z"
+        )
+
     return render(
         request,
         "core/dashboard.html",
@@ -139,7 +159,13 @@ def dashboard(request):
             "latest_interview": latest_interview,
             "recent_activities": recent_activities,
             "stats": stats,
-            "display_stats": display_stats,
+            "display_stats": stats,
+            "quiz_chart": {
+                "points": chart_points,
+                "labels": chart_labels,
+                "polyline": chart_polyline,
+                "area_path": chart_area_path,
+            },
         },
     )
 
@@ -270,16 +296,55 @@ def settings_page(request):
 @login_required
 def profile(request):
     student_profile = get_student_profile(request.user)
-    form = StudentProfileForm(request.POST or None, request.FILES or None, instance=student_profile)
+    form_type = request.POST.get("form_type") if request.method == "POST" else None
+    profile_data = request.POST if form_type == "profile" else None
+    profile_files = request.FILES if form_type == "profile" else None
+    profile_form = StudentProfileForm(
+        profile_data,
+        profile_files,
+        instance=student_profile,
+        user=request.user,
+    )
+    password_form = PasswordChangeForm(request.user, request.POST if form_type == "password" else None)
+    delete_form = DeleteAccountForm(request.POST if form_type == "delete" else None, user=request.user)
+    password_placeholders = {
+        "old_password": "Current password",
+        "new_password1": "New password",
+        "new_password2": "Retype new password",
+    }
+    for name, field in password_form.fields.items():
+        field.widget.attrs.setdefault("class", "form-control")
+        field.widget.attrs.setdefault("placeholder", password_placeholders.get(name, ""))
 
-    if request.method == "POST" and form.is_valid():
-        updated_profile = form.save()
-        names = updated_profile.full_name.split(maxsplit=1)
-        request.user.first_name = names[0]
-        request.user.last_name = names[1] if len(names) > 1 else ""
-        request.user.save(update_fields=["first_name", "last_name"])
+    if request.method == "POST" and form_type == "profile" and profile_form.is_valid():
+        profile_form.save()
         record_activity(request, request.user, UserActivity.Action.PROFILE_UPDATED, "Student profile information was updated.")
         messages.success(request, "Profile updated successfully.")
-        return redirect("core:dashboard")
+        return redirect("core:profile")
 
-    return render(request, "core/profile.html", {"form": form, "profile": student_profile, "active_page": "profile"})
+    if request.method == "POST" and form_type == "password" and password_form.is_valid():
+        user = password_form.save()
+        update_session_auth_hash(request, user)
+        record_activity(request, request.user, UserActivity.Action.PROFILE_UPDATED, "Student password was changed.")
+        messages.success(request, "Password changed successfully.")
+        return redirect("core:profile")
+
+    if request.method == "POST" and form_type == "delete" and delete_form.is_valid():
+        user = request.user
+        logout(request)
+        user.delete()
+        messages.success(request, "Your account has been deleted.")
+        return redirect("core:landing")
+
+    return render(
+        request,
+        "core/profile.html",
+        {
+            "form": profile_form,
+            "password_form": password_form,
+            "delete_form": delete_form,
+            "profile": student_profile,
+            "active_page": "profile",
+            "active_profile_tab": form_type or "details",
+        },
+    )

@@ -76,10 +76,13 @@ class StudentLoginForm(forms.Form):
 
 
 class StudentProfileForm(forms.ModelForm):
+    email = forms.EmailField()
+
     class Meta:
         model = StudentProfile
         fields = [
             "full_name",
+            "email",
             "university",
             "department",
             "semester",
@@ -94,9 +97,54 @@ class StudentProfileForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
+        if self.user:
+            self.fields["email"].initial = self.user.email
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "form-control")
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].lower()
+        existing = User.objects.filter(email=email)
+        if self.user:
+            existing = existing.exclude(pk=self.user.pk)
+        if existing.exists():
+            raise forms.ValidationError("This email is already used by another account.")
+        return email
+
+    def save(self, commit=True):
+        profile = super().save(commit=commit)
+        if self.user:
+            self.user.email = self.cleaned_data["email"].lower()
+            self.user.username = self.user.email
+            names = profile.full_name.split(maxsplit=1)
+            self.user.first_name = names[0] if names else ""
+            self.user.last_name = names[1] if len(names) > 1 else ""
+            if commit:
+                self.user.save(update_fields=["email", "username", "first_name", "last_name"])
+        return profile
+
+
+class DeleteAccountForm(forms.Form):
+    confirm_delete = forms.BooleanField(
+        required=True,
+        label="I agree to delete my profile and account",
+    )
+    current_password = forms.CharField(widget=forms.PasswordInput)
+
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+        self.fields["confirm_delete"].widget.attrs.setdefault("class", "form-check-input")
+        self.fields["current_password"].widget.attrs.setdefault("class", "form-control")
+        self.fields["current_password"].widget.attrs.setdefault("placeholder", "Enter current password")
+
+    def clean_current_password(self):
+        password = self.cleaned_data["current_password"]
+        if self.user and not self.user.check_password(password):
+            raise forms.ValidationError("Current password is not correct.")
+        return password
 
 
 class AIChatForm(forms.ModelForm):
